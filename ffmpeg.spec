@@ -89,7 +89,7 @@ BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(vpx)
 BuildRequires:	pkgconfig(xavs)
 %if %{build_plf}
-BuildRequires:	x264-devel >= 0.129
+BuildRequires:	x264-devel >= 0.142
 BuildRequires:	lame-devel
 BuildRequires:	opencore-amr-devel
 BuildRequires:	libvo-aacenc-devel
@@ -127,7 +127,7 @@ Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
 %if %{with dlopen}
 Suggests:	libfaac.so.0%{_arch_tag_suffix}
-Suggests:	libx264.so.129%{_arch_tag_suffix}
+Suggests:	libx264.so.142%{_arch_tag_suffix}
 Suggests:	libopencore-amrnb.so.0%{_arch_tag_suffix}
 Suggests:	libopencore-amrwb.so.0%{_arch_tag_suffix}
 Suggests:	libmp3lame.so.0%{_arch_tag_suffix}
