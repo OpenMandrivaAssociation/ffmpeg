@@ -1,0 +1,73 @@
+From bf46d9937f8fcb3456b786f64c13e5e069d32c8f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Henrik=20Rydg=C3=A5rd?= <hrydgard@gmail.com>
+Date: Sun, 25 Jan 2015 23:08:12 +0100
+Subject: [PATCH] Apply Maxim's own GHA phase shift patch instead of my hacky
+ attempt
+
+---
+ libavcodec/atrac3plus.c    |  6 +-----
+ libavcodec/atrac3plusdsp.c | 10 ++++++++--
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/libavcodec/atrac3plus.c b/libavcodec/atrac3plus.c
+index 575a493..7042b66 100644
+--- a/libavcodec/atrac3plus.c
++++ b/libavcodec/atrac3plus.c
+@@ -1724,11 +1724,7 @@ static int decode_tones_info(GetBitContext *gb, Atrac3pChanUnitCtx *ctx,
+     if (num_channels == 2) {
+         get_subband_flags(gb, ctx->waves_info->tone_sharing, ctx->waves_info->num_tone_bands);
+         get_subband_flags(gb, ctx->waves_info->tone_master,  ctx->waves_info->num_tone_bands);
+-        if (get_subband_flags(gb, ctx->waves_info->phase_shift,
+-                              ctx->waves_info->num_tone_bands)) {
+-            avpriv_report_missing_feature(avctx, "GHA Phase shifting");
+-            return AVERROR_PATCHWELCOME;
+-        }
++        get_subband_flags(gb, ctx->waves_info->phase_shift, ctx->waves_info->num_tone_bands);
+     }
+ 
+     ctx->waves_info->tones_index = 0;
+diff --git a/libavcodec/atrac3plusdsp.c b/libavcodec/atrac3plusdsp.c
+index 3522af1..5c53e7b 100644
+--- a/libavcodec/atrac3plusdsp.c
++++ b/libavcodec/atrac3plusdsp.c
+@@ -116,6 +116,7 @@ av_cold void ff_atrac3p_init_wave_synth(void)
+  *  @param[in]    synth_param   ptr to common synthesis parameters
+  *  @param[in]    waves_info    parameters for each sine wave
+  *  @param[in]    envelope      envelope data for all waves in a group
++ *  @param[in]    fdsp          ptr to floating-point DSP context
+  *  @param[in]    phase_shift   flag indicates 180° phase shift
+  *  @param[in]    reg_offset    region offset for trimming envelope data
+  *  @param[out]   out           receives sythesized data
+@@ -123,6 +124,7 @@ av_cold void ff_atrac3p_init_wave_synth(void)
+ static void waves_synth(Atrac3pWaveSynthParams *synth_param,
+                         Atrac3pWavesData *waves_info,
+                         Atrac3pWaveEnvelope *envelope,
++                        AVFloatDSPContext *fdsp,
+                         int phase_shift, int reg_offset, float *out)
+ {
+     int i, wn, inc, pos;
+@@ -146,6 +148,10 @@ static void waves_synth(Atrac3pWaveSynthParams *synth_param,
+         }
+     }
+ 
++    /* 180° phase shift if requested */
++    if (phase_shift)
++        fdsp->vector_fmul_scalar(out, out, -1.0f, 128);
++
+     /* fade in with steep Hann window if requested */
+     if (envelope->has_start_point) {
+         pos = (envelope->start_pos << 2) - reg_offset;
+@@ -216,11 +222,11 @@ void ff_atrac3p_generate_tones(Atrac3pChanUnitCtx *ch_unit, AVFloatDSPContext *f
+     /* synthesize waves for both overlapping regions */
+     if (tones_now->num_wavs && reg1_env_nonzero)
+         waves_synth(ch_unit->waves_info_prev, tones_now, &tones_now->curr_env,
+-                    ch_unit->waves_info_prev->phase_shift[sb] & ch_num,
++                    fdsp, ch_unit->waves_info_prev->phase_shift[sb] & ch_num,
+                     128, wavreg1);
+ 
+     if (tones_next->num_wavs && reg2_env_nonzero)
+-        waves_synth(ch_unit->waves_info, tones_next, &tones_next->curr_env,
++        waves_synth(ch_unit->waves_info, tones_next, &tones_next->curr_env, fdsp,
+                     ch_unit->waves_info->phase_shift[sb] & ch_num, 0, wavreg2);
+ 
+     /* Hann windowing for non-faded wave signals */
