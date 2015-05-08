@@ -39,7 +39,7 @@
 Summary:	Hyper fast MPEG1/MPEG4/H263/RV and AC3/MPEG audio encoder
 Name:		ffmpeg
 Version:	2.5.4
-Release:	4%{?extrarelsuffix}
+Release:	4.1%{?extrarelsuffix}
 %if %{build_plf}
 License:	GPLv3+
 %else
@@ -129,6 +129,7 @@ This package is in Restricted as it violates several patents.
 %{_bindir}/*
 %{_mandir}/man1/*
 %{_datadir}/ffmpeg
+%exclude %{_datadir}/ffmpeg/examples
 
 #----------------------------------------------------------------------------
 
@@ -301,6 +302,7 @@ Install this package if you want to compile apps with ffmpeg support.
 %{_libdir}/pkgconfig/libpostproc.pc
 %{_libdir}/pkgconfig/libswresample.pc
 %{_mandir}/man3/lib*.3.*
+%{_datadir}/ffmpeg/examples
 
 #----------------------------------------------------------------------------
 
