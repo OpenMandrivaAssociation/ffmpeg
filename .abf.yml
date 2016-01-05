@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   ffmpeg-2.5.4.tar.bz2: e7d0bab14e82876762531a883c6b48918631d48c
+sources:
+  ffmpeg-2.5.9.tar.bz2: 89988fc408b6ddf3667362418fd5c516f8d90ddf
