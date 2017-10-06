@@ -49,8 +49,8 @@
 
 Summary:	Hyper fast MPEG1/MPEG4/H263/H264/H265/RV and AC3/MPEG audio encoder
 Name:		ffmpeg
-Version:	3.3.1
-Release:	2
+Version:	3.3.4
+Release:	3
 %if %{build_plf}
 License:	GPLv3+
 %else
@@ -63,6 +63,8 @@ Patch1:		ffmpeg-3.0-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 Patch2:		ffmpeg-1.0.1-time.h.patch
 Patch3:		ffmpeg-2.5-fix-build-with-flto-and-inline-assembly.patch
 Patch4:		ffmpeg-local-headers-for-dlopen.patch
+# Fix build with openjpeg 2.2
+Patch5:		https://github.com/FFmpeg/FFmpeg/commit/078322f33ced4b2db6ac3e5002f98233d6fbf643.patch
 BuildRequires:	texi2html
 BuildRequires:	yasm
 BuildRequires:	bzip2-devel
@@ -107,7 +109,7 @@ BuildRequires:	pkgconfig(frei0r)
 %endif
 BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(speex)
-BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(schroedinger-1.0)
 %if 0
 BuildRequires:	pkgconfig(shine)
@@ -298,19 +300,20 @@ This package contains the static libraries for %{name}.
 %endif
 %endif
 %patch3 -p1 -b .flto_inline_asm~
+%patch5 -p1 -b .openjpeg22~
 
 # The debuginfo generator doesn't like non-world readable files
 find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
 # use headers from current packages in restricted repo
 
 %build
-export CFLAGS="%{optflags} -fPIC -I%{_includedir}/openjpeg-1.5/"
+export CFLAGS="%{optflags} -fPIC -I/usr/include/openjpeg-2.2"
 export LDFLAGS="%{ldflags}"
 
 # why?
 %define	__cc	gcc
 %define	__cxx	g++
-./configure \
+if ! ./configure \
 	--cc=%{__cc} \
 	--cxx=%{__cxx} \
 	--prefix=%{_prefix} \
@@ -324,6 +327,7 @@ export LDFLAGS="%{ldflags}"
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
+	--enable-ffplay \
 %ifarch %{ix86} x86_64
 	--disable-lto \
 %else
@@ -418,8 +422,12 @@ export LDFLAGS="%{ldflags}"
 %if 0
 	--disable-libaacplus \
 	--disable-libstagefright-h264 \
-	--disable-decklink
+	--disable-decklink \
 %endif
+	; then
+	cat config.log
+	exit 1
+fi
 
 %make V=1
 
