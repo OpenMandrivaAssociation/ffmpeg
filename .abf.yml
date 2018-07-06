@@ -1,2 +1,4 @@
+removed_sources:
+  ffmpeg-3.4.1.tar.bz2: 4347db0b5a5cfc3847395b29aefb51d09cfdd697
 sources:
-  ffmpeg-3.3.4.tar.bz2: 6cf8f6d927d705b1844f601d93dd4036bd8d5b5d
+  ffmpeg-3.4.2.tar.bz2: 17116d2ca13b91c53db2d4c3976b2ab56f9f69b6

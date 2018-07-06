@@ -49,8 +49,8 @@
 
 Summary:	Hyper fast MPEG1/MPEG4/H263/H264/H265/RV and AC3/MPEG audio encoder
 Name:		ffmpeg
-Version:	3.3.4
-Release:	6
+Version:	3.4.2
+Release:	1
 %if %{build_plf}
 License:	GPLv3+
 %else
@@ -63,8 +63,6 @@ Patch1:		ffmpeg-3.0-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 Patch2:		ffmpeg-1.0.1-time.h.patch
 Patch3:		ffmpeg-2.5-fix-build-with-flto-and-inline-assembly.patch
 Patch4:		ffmpeg-local-headers-for-dlopen.patch
-# Fix build with openjpeg 2.2
-Patch5:		https://github.com/FFmpeg/FFmpeg/commit/078322f33ced4b2db6ac3e5002f98233d6fbf643.patch
 BuildRequires:	texi2html
 BuildRequires:	yasm
 BuildRequires:	bzip2-devel
@@ -73,7 +71,6 @@ BuildRequires:	gsm-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	ladspa-devel
 BuildRequires:	libgme-devel
-BuildRequires:	libnut-devel
 BuildRequires:	pkgconfig(caca)
 BuildRequires:	pkgconfig(celt)
 BuildRequires:	pkgconfig(fontconfig)
@@ -110,7 +107,6 @@ BuildRequires:	pkgconfig(frei0r)
 BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(speex)
 BuildRequires:	pkgconfig(sdl2)
-BuildRequires:	pkgconfig(schroedinger-1.0)
 %if 0
 BuildRequires:	pkgconfig(shine)
 %endif
@@ -300,7 +296,6 @@ This package contains the static libraries for %{name}.
 %endif
 %endif
 %patch3 -p1 -b .flto_inline_asm~
-%patch5 -p1 -b .openjpeg22~
 
 # The debuginfo generator doesn't like non-world readable files
 find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
@@ -309,6 +304,11 @@ find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
 %build
 export CFLAGS="%{optflags} -fPIC -I/usr/include/openjpeg-2.2"
 export LDFLAGS="%{ldflags}"
+
+%ifarch %{ix86}
+# Allow the use of %xmm7 and friends in inline assembly
+export CFLAGS="${CFLAGS} -mmmx -msse -msse2 -msse3"
+%endif
 
 # why?
 %define	__cc	gcc
@@ -340,11 +340,9 @@ if ! ./configure \
 	--enable-libvpx \
 	--enable-runtime-cpudetect \
 	--enable-libdc1394 \
-	--enable-libschroedinger \
 	--enable-librtmp \
 	--enable-libspeex \
 	--enable-libfreetype \
-	--enable-libnut \
 	--enable-libgsm \
 	--enable-libcelt \
 %if %{with opencv}

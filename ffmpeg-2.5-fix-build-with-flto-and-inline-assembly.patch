@@ -22,19 +22,6 @@
  
  #if HAVE_SSE2_INLINE
  
---- ffmpeg-3.3/libavcodec/x86/simple_idct.c.flto_inline_asm~	2017-04-13 03:55:55.000000000 +0200
-+++ ffmpeg-3.3/libavcodec/x86/simple_idct.c	2017-04-19 00:00:07.575644672 +0200
-@@ -52,8 +52,8 @@
- #define ROW_SHIFT 11
- #define COL_SHIFT 20 // 6
- 
--DECLARE_ASM_CONST(8, uint64_t, wm1010)= 0xFFFF0000FFFF0000ULL;
--DECLARE_ASM_CONST(8, uint64_t, d40000)= 0x0000000000040000ULL;
-+DECLARE_ASM_CONST_VISIBLE(8, uint64_t, wm1010)= 0xFFFF0000FFFF0000ULL;
-+DECLARE_ASM_CONST_VISIBLE(8, uint64_t, d40000)= 0x0000000000040000ULL;
- 
- DECLARE_ALIGNED(8, static const int16_t, coeffs)[]= {
-         1<<(ROW_SHIFT-1), 0, 1<<(ROW_SHIFT-1), 0,
 --- ffmpeg-3.3/libavutil/mem.h.flto_inline_asm~	2017-04-13 03:55:55.000000000 +0200
 +++ ffmpeg-3.3/libavutil/mem.h	2017-04-19 00:02:47.850951210 +0200
 @@ -90,6 +90,8 @@
