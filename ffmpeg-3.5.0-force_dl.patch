@@ -1,0 +1,20 @@
+--- ffmpeg-3.5.0/configure.orig	2018-02-24 11:56:59.274144073 +0000
++++ ffmpeg-3.5.0/configure	2018-02-24 16:42:15.375114610 +0000
+@@ -2987,7 +2987,7 @@
+ libx264_encoder_deps="libx264"
+ libx264rgb_encoder_deps="libx264 x264_csp_bgr"
+ libx264rgb_encoder_select="libx264_encoder"
+-libx265_encoder_deps="libx265"
++libx265_encoder_deps="libx265 libdl"
+ libxavs_encoder_deps="libxavs"
+ libxvid_encoder_deps="libxvid"
+ libzvbi_teletext_decoder_deps="libzvbi"
+@@ -5804,7 +5804,7 @@
+ enabled  lzma && check_lib lzma   lzma.h lzma_version_number -llzma
+ 
+ # On some systems dynamic loading requires no extra linker flags
+-check_lib libdl dlfcn.h "dlopen dlsym" || check_lib libdl dlfcn.h "dlopen dlsym" -ldl
++check_lib libdl dlfcn.h "dlopen dlsym" -ldl
+ 
+ check_lib libm math.h sin -lm
+ 

@@ -1,6 +1,7 @@
---- ffmpeg-3.4/configure.dlopen~	2017-10-15 17:59:36.000000000 +0200
-+++ ffmpeg-3.4/configure	2017-10-18 16:44:37.925371529 +0200
-@@ -230,6 +230,7 @@ External library support:
+diff -up ffmpeg-3.5.0/configure.dlopen~ ffmpeg-3.5.0/configure
+--- ffmpeg-3.5.0/configure.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/configure	2018-04-21 19:45:40.242937921 +0200
+@@ -229,6 +229,7 @@ External library support:
    --enable-libdc1394       enable IIDC-1394 grabbing using libdc1394
                             and libraw1394 [no]
    --enable-libfdk-aac      enable AAC de/encoding via libfdk-aac [no]
@@ -20,7 +21,7 @@
    --enable-libopencv       enable video filtering via libopencv [no]
    --enable-libopenh264     enable H.264 encoding via OpenH264 [no]
    --enable-libopenjpeg     enable JPEG 2000 de/encoding via OpenJPEG [no]
-@@ -271,7 +275,9 @@ External library support:
+@@ -274,7 +278,9 @@ External library support:
    --enable-libwavpack      enable wavpack encoding via libwavpack [no]
    --enable-libwebp         enable WebP encoding via libwebp [no]
    --enable-libx264         enable H.264 encoding via x264 [no]
@@ -30,7 +31,7 @@
    --enable-libxavs         enable AVS encoding via xavs [no]
    --enable-libxcb          enable X11 grabbing using XCB [autodetect]
    --enable-libxcb-shm      enable X11 grabbing shm communication [autodetect]
-@@ -279,6 +285,7 @@ External library support:
+@@ -282,6 +288,7 @@ External library support:
    --enable-libxcb-shape    enable X11 grabbing shape rendering [autodetect]
    --enable-libxvid         enable Xvid encoding via xvidcore,
                             native MPEG-4/Xvid encoder exists [no]
@@ -38,7 +39,7 @@
    --enable-libxml2         enable XML parsing using the C library libxml2 [no]
    --enable-libzimg         enable z.lib, needed for zscale filter [no]
    --enable-libzmq          enable message passing via libzmq [no]
-@@ -1553,22 +1560,28 @@ EXTERNAL_LIBRARY_GPL_LIST="
+@@ -1635,15 +1642,19 @@ EXTERNAL_LIBRARY_GPL_LIST="
      librubberband
      libvidstab
      libx264
@@ -56,18 +57,19 @@
      libfdk_aac
 +    libfdk_aac_dlopen
      openssl
+     libtls
  "
- 
+@@ -1651,7 +1662,9 @@ EXTERNAL_LIBRARY_NONFREE_LIST="
  EXTERNAL_LIBRARY_VERSION3_LIST="
      gmp
      libopencore_amrnb
 +    libopencore_amrnb_dlopen
      libopencore_amrwb
 +    libopencore_amrwb_dlopen
+     libvmaf
      libvo_amrwbenc
      rkmpp
- "
-@@ -1606,6 +1619,7 @@ EXTERNAL_LIBRARY_LIST="
+@@ -1692,6 +1705,7 @@ EXTERNAL_LIBRARY_LIST="
      libkvazaar
      libmodplug
      libmp3lame
@@ -75,20 +77,20 @@
      libmysofa
      libopencv
      libopenh264
-@@ -5921,6 +5935,7 @@ enabled libdrm            && require_pkg
- enabled libfdk_aac        && { use_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
+@@ -5977,6 +5991,7 @@ enabled libdrm            && require_pkg
+ enabled libfdk_aac        && { check_pkg_config libfdk_aac fdk-aac "fdk-aac/aacenc_lib.h" aacEncOpen ||
                                 { require libfdk_aac fdk-aac/aacenc_lib.h aacEncOpen -lfdk-aac &&
                                   warn "using libfdk without pkg-config"; } }
 +enabled libfdk_aac_dlopen && enable libfdk_aac && add_cppflags "-I$(dirname `readlink -f $0`)/localinc"
  flite_extralibs="-lflite_cmu_time_awb -lflite_cmu_us_awb -lflite_cmu_us_kal -lflite_cmu_us_kal16 -lflite_cmu_us_rms -lflite_cmu_us_slt -lflite_usenglish -lflite_cmulex -lflite"
  enabled libflite          && require libflite "flite/flite.h" flite_init $flite_extralibs
  enabled fontconfig        && enable libfontconfig
-@@ -5944,12 +5959,15 @@ enabled libmfx            && { use_pkg_c
-                                { require libmfx "mfx/mfxvideo.h" MFXInit -llibmfx && warn "using libmfx without pkg-config"; } }
+@@ -6000,12 +6015,15 @@ enabled libmfx            && { check_pkg
+                                { require libmfx "mfx/mfxvideo.h" MFXInit "-llibmfx $advapi32_extralibs" && warn "using libmfx without pkg-config"; } }
  enabled libmodplug        && require_pkg_config libmodplug libmodplug libmodplug/modplug.h ModPlug_Load
- enabled libmp3lame        && require "libmp3lame >= 3.98.3" lame/lame.h lame_set_VBR_quality -lmp3lame
+ enabled libmp3lame        && require "libmp3lame >= 3.98.3" lame/lame.h lame_set_VBR_quality -lmp3lame $libm_extralibs
 +enabled libmp3lame_dlopen && enable libmp3lame && add_cppflags "-I$(dirname `readlink -f $0`)/localinc"
- enabled libmysofa         && require libmysofa "mysofa.h" mysofa_load -lmysofa
+ enabled libmysofa         && require libmysofa "mysofa.h" mysofa_load -lmysofa $zlib_extralibs
  enabled libnpp            && { check_lib libnpp npp.h nppGetLibVersion -lnppig -lnppicc -lnppc ||
                                 check_lib libnpp npp.h nppGetLibVersion -lnppi -lnppc ||
                                 die "ERROR: libnpp not found"; }
@@ -97,24 +99,25 @@
  enabled libopencore_amrwb && require libopencore_amrwb opencore-amrwb/dec_if.h D_IF_init -lopencore-amrwb
 +enabled libopencore_amrwb_dlopen && enable libopencore_amrwb && add_cppflags "-I$(dirname `readlink -f $0`)/localinc"
  enabled libopencv         && { check_header opencv2/core/core_c.h &&
-                                { use_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
-                                  require opencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
-@@ -6031,10 +6049,13 @@ enabled libx264           && { use_pkg_c
+                                { check_pkg_config libopencv opencv opencv2/core/core_c.h cvCreateImageHeader ||
+                                  require libopencv opencv2/core/core_c.h cvCreateImageHeader -lopencv_core -lopencv_imgproc; } ||
+@@ -6080,10 +6098,13 @@ enabled libx264           && { check_pkg
+                                  warn "using libx264 without pkg-config"; } } &&
                               require_cpp_condition x264.h "X264_BUILD >= 118" &&
-                              { check_cpp_condition x264.h "X264_MPEG2" &&
-                                enable libx262; }
+                              check_cpp_condition libx262 x264.h "X264_MPEG2"
 +enabled libx264_dlopen    && enable libx264 && add_cppflags "-I$(dirname `readlink -f $0`)/localinc"
  enabled libx265           && require_pkg_config libx265 x265 x265.h x265_api_get &&
                               require_cpp_condition x265.h "X265_BUILD >= 68"
 +enabled libx265_dlopen    && enable libx265 && add_cppflags "-I$(dirname `readlink -f $0`)/localinc"
- enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode -lxavs
+ enabled libxavs           && require libxavs "stdint.h xavs.h" xavs_encoder_encode "-lxavs $pthreads_extralibs $libm_extralibs"
  enabled libxvid           && require libxvid xvid.h xvid_global -lxvidcore
 +enabled libxvid_dlopen    && enable libxvid && add_cppflags "-I$(dirname `readlink -f $0`)/localinc"
- enabled libzimg           && require_pkg_config libzimg "zimg >= 2.3.0" zimg.h zimg_get_api_version
+ enabled libzimg           && require_pkg_config libzimg "zimg >= 2.7.0" zimg.h zimg_get_api_version
  enabled libzmq            && require_pkg_config libzmq libzmq zmq.h zmq_ctx_new
- enabled libzvbi           && require libzvbi libzvbi.h vbi_decoder_new -lzvbi &&
---- ffmpeg-3.4/libavcodec/dlopen.h.dlopen~	2017-10-18 16:38:17.299271811 +0200
-+++ ffmpeg-3.4/libavcodec/dlopen.h	2017-10-18 16:38:17.299271811 +0200
+ enabled libzvbi           && require_pkg_config libzvbi zvbi-0.2 libzvbi.h vbi_decoder_new &&
+diff -up ffmpeg-3.5.0/libavcodec/dlopen.h.dlopen~ ffmpeg-3.5.0/libavcodec/dlopen.h
+--- ffmpeg-3.5.0/libavcodec/dlopen.h.dlopen~	2018-04-21 19:44:02.796540794 +0200
++++ ffmpeg-3.5.0/libavcodec/dlopen.h	2018-04-21 19:44:02.796540794 +0200
 @@ -0,0 +1,13 @@
 +#ifndef LOCALINC_DLOPEN_H
 +#define LOCALINC_DLOPEN_H
@@ -129,8 +132,9 @@
 +		goto error;
 +
 +#endif
---- ffmpeg-3.4/libavcodec/libfdk-aacdec.c.dlopen~	2017-07-19 14:02:02.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libfdk-aacdec.c	2017-10-18 16:38:17.299271811 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libfdk-aacdec.c.dlopen~ ffmpeg-3.5.0/libavcodec/libfdk-aacdec.c
+--- ffmpeg-3.5.0/libavcodec/libfdk-aacdec.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libfdk-aacdec.c	2018-04-21 19:44:02.796540794 +0200
 @@ -31,6 +31,54 @@
  #define AAC_PCM_MAX_OUTPUT_CHANNELS AAC_PCM_OUTPUT_CHANNELS
  #endif
@@ -186,7 +190,7 @@
  enum ConcealMethod {
      CONCEAL_METHOD_SPECTRAL_MUTING      =  0,
      CONCEAL_METHOD_NOISE_SUBSTITUTION   =  1,
-@@ -210,6 +258,11 @@ static av_cold int fdk_aac_decode_init(A
+@@ -213,6 +261,11 @@ static av_cold int fdk_aac_decode_init(A
      FDKAACDecContext *s = avctx->priv_data;
      AAC_DECODER_ERROR err;
  
@@ -198,8 +202,9 @@
      s->handle = aacDecoder_Open(avctx->extradata_size ? TT_MP4_RAW : TT_MP4_ADTS, 1);
      if (!s->handle) {
          av_log(avctx, AV_LOG_ERROR, "Error opening decoder\n");
---- ffmpeg-3.4/libavcodec/libfdk-aacenc.c.dlopen~	2017-10-15 17:59:37.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libfdk-aacenc.c	2017-10-18 16:38:17.299271811 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libfdk-aacenc.c.dlopen~ ffmpeg-3.5.0/libavcodec/libfdk-aacenc.c
+--- ffmpeg-3.5.0/libavcodec/libfdk-aacenc.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libfdk-aacenc.c	2018-04-21 19:44:02.796540794 +0200
 @@ -26,6 +26,48 @@
  #include "audio_frame_queue.h"
  #include "internal.h"
@@ -249,7 +254,7 @@
  typedef struct AACContext {
      const AVClass *class;
      HANDLE_AACENCODER handle;
-@@ -111,6 +153,11 @@ static av_cold int aac_encode_init(AVCod
+@@ -114,6 +156,11 @@ static av_cold int aac_encode_init(AVCod
      int aot = FF_PROFILE_AAC_LOW + 1;
      int sce = 0, cpe = 0;
  
@@ -261,8 +266,9 @@
      if ((err = aacEncOpen(&s->handle, 0, avctx->channels)) != AACENC_OK) {
          av_log(avctx, AV_LOG_ERROR, "Unable to open the encoder: %s\n",
                 aac_get_error(err));
---- ffmpeg-3.4/libavcodec/libmp3lame.c.dlopen~	2017-10-15 17:59:37.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libmp3lame.c	2017-10-18 16:38:17.299271811 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libmp3lame.c.dlopen~ ffmpeg-3.5.0/libavcodec/libmp3lame.c
+--- ffmpeg-3.5.0/libavcodec/libmp3lame.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libmp3lame.c	2018-04-21 19:44:02.797540788 +0200
 @@ -38,6 +38,145 @@
  #include "mpegaudio.h"
  #include "mpegaudiodecheader.h"
@@ -421,8 +427,9 @@
      s->avctx = avctx;
  
      /* initialize LAME and get defaults */
---- ffmpeg-3.4/libavcodec/libopencore-amr.c.dlopen~	2017-09-12 02:51:33.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libopencore-amr.c	2017-10-18 16:38:17.299271811 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libopencore-amr.c.dlopen~ ffmpeg-3.5.0/libavcodec/libopencore-amr.c
+--- ffmpeg-3.5.0/libavcodec/libopencore-amr.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libopencore-amr.c	2018-04-21 19:44:02.797540788 +0200
 @@ -29,6 +29,108 @@
  #include "audio_frame_queue.h"
  #include "internal.h"
@@ -542,7 +549,7 @@
  typedef struct AMRContext {
      AVClass *av_class;
      void *dec_state;
-@@ -190,6 +289,11 @@ static av_cold int amr_nb_encode_init(AV
+@@ -193,6 +292,11 @@ static av_cold int amr_nb_encode_init(AV
  {
      AMRContext *s = avctx->priv_data;
  
@@ -554,7 +561,7 @@
      if (avctx->sample_rate != 8000 && avctx->strict_std_compliance > FF_COMPLIANCE_UNOFFICIAL) {
          av_log(avctx, AV_LOG_ERROR, "Only 8000Hz sample rate supported\n");
          return AVERROR(ENOSYS);
-@@ -300,10 +404,6 @@ AVCodec ff_libopencore_amrnb_encoder = {
+@@ -303,10 +407,6 @@ AVCodec ff_libopencore_amrnb_encoder = {
  
  /* -----------AMR wideband ------------*/
  #if CONFIG_LIBOPENCORE_AMRWB_DECODER
@@ -565,7 +572,7 @@
  typedef struct AMRWBContext {
      void  *state;
  } AMRWBContext;
-@@ -316,6 +416,11 @@ static av_cold int amr_wb_decode_init(AV
+@@ -319,6 +419,11 @@ static av_cold int amr_wb_decode_init(AV
      if ((ret = amr_decode_fix_avctx(avctx)) < 0)
          return ret;
  
@@ -577,8 +584,9 @@
      s->state        = D_IF_init();
  
      return 0;
---- ffmpeg-3.4/libavcodec/libx264.c.dlopen~	2017-10-15 17:59:37.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libx264.c	2017-10-18 16:38:17.299271811 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libx264.c.dlopen~ ffmpeg-3.5.0/libavcodec/libx264.c
+--- ffmpeg-3.5.0/libavcodec/libx264.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libx264.c	2018-04-21 19:44:02.797540788 +0200
 @@ -40,6 +40,120 @@
  #include <stdlib.h>
  #include <string.h>
@@ -700,7 +708,7 @@
  typedef struct X264Context {
      AVClass        *class;
      x264_param_t    params;
-@@ -458,6 +572,11 @@ static av_cold int X264_init(AVCodecCont
+@@ -462,6 +576,11 @@ static av_cold int X264_init(AVCodecCont
      if (avctx->global_quality > 0)
          av_log(avctx, AV_LOG_WARNING, "-qscale is ignored, -crf is recommended.\n");
  
@@ -712,8 +720,9 @@
  #if CONFIG_LIBX262_ENCODER
      if (avctx->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
          x4->params.b_mpeg2 = 1;
---- ffmpeg-3.4/libavcodec/libx265.c.dlopen~	2017-10-15 17:59:37.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libx265.c	2017-10-18 16:38:17.300271809 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libx265.c.dlopen~ ffmpeg-3.5.0/libavcodec/libx265.c
+--- ffmpeg-3.5.0/libavcodec/libx265.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libx265.c	2018-04-21 19:44:02.797540788 +0200
 @@ -34,6 +34,39 @@
  #include "avcodec.h"
  #include "internal.h"
@@ -754,7 +763,7 @@
  typedef struct libx265Context {
      const AVClass *class;
  
-@@ -377,6 +410,10 @@ static const enum AVPixelFormat x265_csp
+@@ -408,6 +441,10 @@ static const enum AVPixelFormat x265_csp
  
  static av_cold void libx265_encode_init_csp(AVCodec *codec)
  {
@@ -765,8 +774,9 @@
      if (x265_api_get(12))
          codec->pix_fmts = x265_csp_twelve;
      else if (x265_api_get(10))
---- ffmpeg-3.4/libavcodec/libxvid.c.dlopen~	2017-09-12 02:51:33.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libxvid.c	2017-10-18 16:38:17.300271809 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libxvid.c.dlopen~ ffmpeg-3.5.0/libavcodec/libxvid.c
+--- ffmpeg-3.5.0/libavcodec/libxvid.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libxvid.c	2018-04-21 19:44:02.797540788 +0200
 @@ -51,6 +51,61 @@
  #include <io.h>
  #endif
@@ -841,8 +851,9 @@
      x->twopassfd = -1;
  
      /* Bring in VOP flags from ffmpeg command-line */
---- ffmpeg-3.4/libavcodec/libxvid_rc.c.dlopen~	2017-10-15 17:59:37.000000000 +0200
-+++ ffmpeg-3.4/libavcodec/libxvid_rc.c	2017-10-18 16:38:17.300271809 +0200
+diff -up ffmpeg-3.5.0/libavcodec/libxvid_rc.c.dlopen~ ffmpeg-3.5.0/libavcodec/libxvid_rc.c
+--- ffmpeg-3.5.0/libavcodec/libxvid_rc.c.dlopen~	2018-04-21 11:34:49.000000000 +0200
++++ ffmpeg-3.5.0/libavcodec/libxvid_rc.c	2018-04-21 19:44:02.797540788 +0200
 @@ -39,6 +39,41 @@
  #include "libxvid.h"
  #include "mpegvideo.h"
