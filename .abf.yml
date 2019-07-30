@@ -1,3 +1,5 @@
-sources:
-  restricted-multimedia-headers.tar.xz: 63ce5df2248e9c68869126ecaeb895f525304be0
+removed_sources:
   ffmpeg-4.0.2.tar.bz2: 7b9deb74b4fcc665c5187dcd057b678e754b43d2
+sources:
+  ffmpeg-4.0.4.tar.bz2: 8cc9d0969449919ae46527f05b9ac4d42c14ca4d
+  restricted-multimedia-headers.tar.xz: 5aa1119216e065a3c3e0638af0a7a596e1c653e0
