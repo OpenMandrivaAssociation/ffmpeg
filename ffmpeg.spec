@@ -3,18 +3,16 @@
 %bcond_without compat32
 %endif
 
-%define major 58
-%define ppmajor 55
-%define avumajor 56
-%define swsmajor 5
-%define filtermajor 7
-%define swrmajor 3
-%define avrmajor 4
+%define major 59
+%define ppmajor 56
+%define avumajor 57
+%define swsmajor 6
+%define filtermajor 8
+%define swrmajor 4
 %define libavcodec %mklibname avcodec %{major}
 %define libavdevice %mklibname avdevice %{major}
 %define libavfilter %mklibname avfilter %{filtermajor}
 %define libavformat %mklibname avformat %{major}
-%define libavresample %mklibname avresample %{avrmajor}
 %define libavutil %mklibname avutil %{avumajor}
 %define libpostproc %mklibname postproc %{ppmajor}
 %define libswresample %mklibname swresample %{swrmajor}
@@ -23,7 +21,6 @@
 %define lib32avdevice %mklib32name avdevice %{major}
 %define lib32avfilter %mklib32name avfilter %{filtermajor}
 %define lib32avformat %mklib32name avformat %{major}
-%define lib32avresample %mklib32name avresample %{avrmajor}
 %define lib32avutil %mklib32name avutil %{avumajor}
 %define lib32postproc %mklib32name postproc %{ppmajor}
 %define lib32swresample %mklib32name swresample %{swrmajor}
@@ -87,8 +84,8 @@
 
 Summary:	Hyper fast MPEG1/MPEG4/H263/H264/H265/RV and AC3/MPEG audio encoder
 Name:		ffmpeg
-Version:	4.4.1
-Release:	4
+Version:	5.0
+Release:	1
 %if %{build_plf}
 License:	GPLv3+
 %else
@@ -125,12 +122,14 @@ BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(fdk-aac)
 %endif
 BuildRequires:	pkgconfig(dav1d)
+BuildRequires:	pkgconfig(SvtAv1Enc)
 %ifnarch %{ix86} %{riscv} aarch64
 BuildRequires:	pkgconfig(rav1e)
 %endif
 %ifnarch %{riscv}
 BuildRequires:	pkgconfig(aom)
 %endif
+BuildRequires:	pkgconfig(uavs3d)
 BuildRequires:	pkgconfig(ffnvcodec)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(gnutls)
@@ -346,13 +345,6 @@ Group:		System/Libraries
 This package contains a shared library for %{name}.
 %endif
 
-%package -n %{libavresample}
-Summary:	Shared library part of ffmpeg
-Group:		System/Libraries
-
-%description -n %{libavresample}
-This package contains a shared library for %{name}.
-
 %package -n %{devname}
 Summary:	Header files for the ffmpeg codec library
 Group:		Development/C
@@ -449,13 +441,6 @@ Group:		System/Libraries
 This package contains a shared library for %{name}.
 %endif
 
-%package -n %{lib32avresample}
-Summary:	Shared library part of ffmpeg (32-bit)
-Group:		System/Libraries
-
-%description -n %{lib32avresample}
-This package contains a shared library for %{name}.
-
 %package -n %{dev32name}
 Summary:	Header files for the ffmpeg codec library (32-bit)
 Group:		Development/C
@@ -532,7 +517,6 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--shlibdir=%{_prefix}/lib \
 	--incdir=%{_includedir} \
 	--disable-stripping \
-	--enable-avresample \
 	--enable-postproc \
 	--enable-gpl \
 	--enable-version3 \
@@ -541,7 +525,6 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--enable-nvenc \
 %endif
 	--enable-ffplay \
-	--disable-libdav1d \
 	--disable-librav1e \
 	--enable-libaom \
 	--enable-lto \
@@ -573,6 +556,7 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--enable-openal \
 %endif
 	--enable-opengl \
+	--enable-libdrm \
 	--disable-libzmq \
 	--disable-libzvbi \
 	--disable-libssh \
@@ -590,6 +574,8 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--disable-ladspa \
 	--disable-libwebp \
 	--enable-fontconfig \
+	--enable-libfontconfig \
+	--enable-libfreetype \
 	--enable-libxcb \
 	--enable-libxcb-shm \
 	--enable-libxcb-xfixes \
@@ -643,7 +629,6 @@ if ! ./configure \
 	--shlibdir=%{_libdir} \
 	--incdir=%{_includedir} \
 	--disable-stripping \
-	--enable-avresample \
 	--enable-postproc \
 	--enable-gpl \
 	--enable-version3 \
@@ -653,6 +638,7 @@ if ! ./configure \
 %endif
 	--enable-ffplay \
 	--enable-libdav1d \
+	--enable-libsvtav1 \
 %ifnarch %{ix86} aarch64
 	--enable-librav1e \
 %endif
@@ -685,6 +671,7 @@ if ! ./configure \
 %endif
 	--enable-libopenjpeg \
 	--enable-libxavs \
+	--enable-libuavs3d \
 	--enable-libmodplug \
 	--enable-libass \
 	--enable-gnutls \
@@ -759,6 +746,17 @@ if ! ./configure \
 %else
 	--disable-opencl \
 %endif
+%ifarch znver1
+	--enable-mmx \
+	--enable-sse \
+	--enable-sse2 \
+	--enable-sse3 \
+	--enable-ssse3 \
+	--enable-sse4 \
+	--enable-sse42 \
+	--enable-avx \
+	--enable-aesni \
+%endif
 %if 0
 	--disable-libaacplus \
 	--disable-libstagefright-h264 \
@@ -815,14 +813,10 @@ cd ..
 %{_libdir}/libswscale.so.%{swsmajor}*
 %endif
 
-%files -n %{libavresample}
-%{_libdir}/libavresample.so.%{avrmajor}*
-
 %files -n %{devname}
 %{_includedir}/libavcodec
 %{_includedir}/libavdevice
 %{_includedir}/libavformat
-%{_includedir}/libavresample
 %{_includedir}/libavutil
 %{_includedir}/libpostproc
 %{_includedir}/libavfilter
@@ -830,7 +824,6 @@ cd ..
 %{_libdir}/libavcodec.so
 %{_libdir}/libavdevice.so
 %{_libdir}/libavformat.so
-%{_libdir}/libavresample.so
 %{_libdir}/libavutil.so
 %{_libdir}/libpostproc.so
 %{_libdir}/libavfilter.so
@@ -843,7 +836,6 @@ cd ..
 %{_libdir}/pkgconfig/libavcodec.pc
 %{_libdir}/pkgconfig/libavdevice.pc
 %{_libdir}/pkgconfig/libavformat.pc
-%{_libdir}/pkgconfig/libavresample.pc
 %{_libdir}/pkgconfig/libavutil.pc
 %{_libdir}/pkgconfig/libpostproc.pc
 %{_libdir}/pkgconfig/libavfilter.pc
@@ -887,14 +879,10 @@ cd ..
 %{_prefix}/lib/libswscale.so.%{swsmajor}*
 %endif
 
-%files -n %{lib32avresample}
-%{_prefix}/lib/libavresample.so.%{avrmajor}*
-
 %files -n %{dev32name}
 %{_prefix}/lib/libavcodec.so
 %{_prefix}/lib/libavdevice.so
 %{_prefix}/lib/libavformat.so
-%{_prefix}/lib/libavresample.so
 %{_prefix}/lib/libavutil.so
 %{_prefix}/lib/libpostproc.so
 %{_prefix}/lib/libavfilter.so
@@ -906,7 +894,6 @@ cd ..
 %{_prefix}/lib/pkgconfig/libavcodec.pc
 %{_prefix}/lib/pkgconfig/libavdevice.pc
 %{_prefix}/lib/pkgconfig/libavformat.pc
-%{_prefix}/lib/pkgconfig/libavresample.pc
 %{_prefix}/lib/pkgconfig/libavutil.pc
 %{_prefix}/lib/pkgconfig/libpostproc.pc
 %{_prefix}/lib/pkgconfig/libavfilter.pc
