@@ -76,16 +76,16 @@
 %global optflags %{optflags} -O3 -fopenmp
 %global ldflags %{ldflags} -O3 -fopenmp
 
+Summary:	Hyper fast MPEG1/MPEG4/H263/H264/H265/RV and AC3/MPEG audio encoder
+Name:		ffmpeg
 # (tpg) BIG FAT WARNING !!!
 # ALWAYS RUN package-restricted-headers.sh
 # AND UPLOAD output file as SOURCE1
-%define x264_major 161
+%define x264_major 163
 %define x265_major 199
-
-Summary:	Hyper fast MPEG1/MPEG4/H263/H264/H265/RV and AC3/MPEG audio encoder
-Name:		ffmpeg
 Version:	5.0
-Release:	1
+Release:	2
+# BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
 %else
@@ -285,6 +285,7 @@ Suggests:	libxvidcore.so.4%{_arch_tag_suffix}
 Suggests:	libfdk-aac.so.2%{_arch_tag_suffix}
 %endif
 %endif
+Requires:	vdpau-drivers
 Obsoletes:	%{_lib}ffmpeg54 < 1.1-3
 
 %description -n %{libavcodec}
@@ -386,6 +387,7 @@ Suggests:	libopencore-amrwb.so.0
 Suggests:	libmp3lame.so.0
 Suggests:	libxvidcore.so.4
 Suggests:	libfdk-aac.so.2
+Requires:	libvdpau-drivers
 
 %description -n %{lib32avcodec}
 This package contains a shared library for %{name}.
@@ -483,10 +485,10 @@ find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
 
 %build
 %ifarch %{ix86}
-%global ldflags %{ldflags} -Wl,-z,notext
+%global ldflags %{build_ldflags} -Wl,-z,notext
 %endif
 export CFLAGS="%{optflags} -fPIC -I/usr/include/openjpeg-2.2"
-export LDFLAGS="%{ldflags}"
+export LDFLAGS="%{build_ldflags}"
 
 %ifarch %{ix86}
 # Allow the use of %xmm7 and friends in inline assembly
@@ -779,7 +781,7 @@ cd ..
 
 %files
 %{_bindir}/*
-%{_mandir}/man1/*
+%doc %{_mandir}/man1/*
 %{_datadir}/ffmpeg
 %exclude %{_datadir}/ffmpeg/examples
 
