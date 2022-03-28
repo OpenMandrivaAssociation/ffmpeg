@@ -512,7 +512,6 @@ cd build32
 if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer" LDFLAGS="$(echo $LDFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer" ./configure \
 	--cc="gcc -m32" \
 	--cxx="g++ -m32" \
-	--ranlib=%{__ranlib} \
 	--prefix=%{_prefix} \
 	--enable-shared \
 	--libdir=%{_prefix}/lib \
@@ -624,7 +623,6 @@ cd ..
 if ! ./configure \
 	--cc=%{__cc} \
 	--cxx=%{__cxx} \
-	--ranlib=%{__ranlib} \
 	--prefix=%{_prefix} \
 	--enable-shared \
 	--libdir=%{_libdir} \
