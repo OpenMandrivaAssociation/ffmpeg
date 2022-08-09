@@ -1,18 +1,18 @@
-diff -up ffmpeg-4.4/libavcodec/cabac.c.flto_inline_asm~ ffmpeg-4.4/libavcodec/cabac.c
---- ffmpeg-4.4/libavcodec/cabac.c.flto_inline_asm~	2021-04-08 23:28:39.000000000 +0200
-+++ ffmpeg-4.4/libavcodec/cabac.c	2021-04-09 18:07:36.149569656 +0200
-@@ -32,7 +32,7 @@
+diff -up ffmpeg-5.1/libavcodec/cabac.c.flto_inline_asm~ ffmpeg-5.1/libavcodec/cabac.c
+--- ffmpeg-5.1/libavcodec/cabac.c.flto_inline_asm~	2022-08-09 16:19:59.546808285 +0200
++++ ffmpeg-5.1/libavcodec/cabac.c	2022-08-09 16:21:59.096771559 +0200
+@@ -29,7 +29,7 @@
+ 
  #include "cabac.h"
- #include "cabac_functions.h"
  
 -DECLARE_ASM_ALIGNED(1, const uint8_t, ff_h264_cabac_tables)[512 + 4*2*64 + 4*64 + 63] = {
 +__attribute__((used)) __attribute__((visibility("protected"))) DECLARE_ASM_ALIGNED(1, const uint8_t, ff_h264_cabac_tables)[512 + 4*2*64 + 4*64 + 63] = {
      9,8,7,7,6,6,6,6,5,5,5,5,5,5,5,5,
      4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
      3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
-diff -up ffmpeg-4.4/libavcodec/x86/lpc.c.flto_inline_asm~ ffmpeg-4.4/libavcodec/x86/lpc.c
---- ffmpeg-4.4/libavcodec/x86/lpc.c.flto_inline_asm~	2020-07-09 11:17:46.000000000 +0200
-+++ ffmpeg-4.4/libavcodec/x86/lpc.c	2021-04-09 18:07:36.149569656 +0200
+diff -up ffmpeg-5.1/libavcodec/x86/lpc.c.flto_inline_asm~ ffmpeg-5.1/libavcodec/x86/lpc.c
+--- ffmpeg-5.1/libavcodec/x86/lpc.c.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
++++ ffmpeg-5.1/libavcodec/x86/lpc.c	2022-08-09 16:19:59.547808260 +0200
 @@ -26,8 +26,8 @@
  #include "libavutil/x86/cpu.h"
  #include "libavcodec/lpc.h"
@@ -24,10 +24,10 @@ diff -up ffmpeg-4.4/libavcodec/x86/lpc.c.flto_inline_asm~ ffmpeg-4.4/libavcodec/
  
  #if HAVE_SSE2_INLINE
  
-diff -up ffmpeg-4.4/libavutil/mem.h.flto_inline_asm~ ffmpeg-4.4/libavutil/mem.h
---- ffmpeg-4.4/libavutil/mem.h.flto_inline_asm~	2021-04-08 23:28:40.000000000 +0200
-+++ ffmpeg-4.4/libavutil/mem.h	2021-04-09 18:07:36.149569656 +0200
-@@ -109,14 +109,16 @@
+diff -up ffmpeg-5.1/libavutil/mem.h.flto_inline_asm~ ffmpeg-5.1/libavutil/mem.h
+--- ffmpeg-5.1/libavutil/mem.h.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
++++ ffmpeg-5.1/libavutil/mem.h	2022-08-09 16:19:59.547808260 +0200
+@@ -108,14 +108,16 @@
      #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
      #define DECLARE_ASM_ALIGNED(n,t,v)  t __attribute__ ((aligned (n))) v
      #define DECLARE_ASM_CONST(n,t,v)    const t __attribute__ ((aligned (n))) v
@@ -45,7 +45,7 @@ diff -up ffmpeg-4.4/libavutil/mem.h.flto_inline_asm~ ffmpeg-4.4/libavutil/mem.h
  #elif defined(_MSC_VER)
      #define DECLARE_ALIGNED(n,t,v)      __declspec(align(n)) t v
      #define DECLARE_ASM_ALIGNED(n,t,v)  __declspec(align(n)) t v
-@@ -125,6 +127,7 @@
+@@ -124,6 +126,7 @@
      #define DECLARE_ALIGNED(n,t,v)      t v
      #define DECLARE_ASM_ALIGNED(n,t,v)  t v
      #define DECLARE_ASM_CONST(n,t,v)    static const t v
@@ -53,10 +53,10 @@ diff -up ffmpeg-4.4/libavutil/mem.h.flto_inline_asm~ ffmpeg-4.4/libavutil/mem.h
  #endif
  
  /**
-diff -up ffmpeg-4.4/libpostproc/postprocess.c.flto_inline_asm~ ffmpeg-4.4/libpostproc/postprocess.c
---- ffmpeg-4.4/libpostproc/postprocess.c.flto_inline_asm~	2020-07-11 12:39:30.000000000 +0200
-+++ ffmpeg-4.4/libpostproc/postprocess.c	2021-04-09 18:07:36.149569656 +0200
-@@ -118,17 +118,17 @@ const char *postproc_license(void)
+diff -up ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~ ffmpeg-5.1/libpostproc/postprocess.c
+--- ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
++++ ffmpeg-5.1/libpostproc/postprocess.c	2022-08-09 16:19:59.547808260 +0200
+@@ -99,17 +99,17 @@ try to unroll inner for(x=0 ... loop to
  //#define NUM_BLOCKS_AT_ONCE 16 //not used yet
  
  #if ARCH_X86 && HAVE_INLINE_ASM
@@ -82,9 +82,9 @@ diff -up ffmpeg-4.4/libpostproc/postprocess.c.flto_inline_asm~ ffmpeg-4.4/libpos
  
  
  static const struct PPFilter filters[]=
-diff -up ffmpeg-4.4/libswscale/x86/rgb2rgb.c.flto_inline_asm~ ffmpeg-4.4/libswscale/x86/rgb2rgb.c
---- ffmpeg-4.4/libswscale/x86/rgb2rgb.c.flto_inline_asm~	2021-04-08 23:28:40.000000000 +0200
-+++ ffmpeg-4.4/libswscale/x86/rgb2rgb.c	2021-04-09 18:08:54.925731978 +0200
+diff -up ffmpeg-5.1/libswscale/x86/rgb2rgb.c.flto_inline_asm~ ffmpeg-5.1/libswscale/x86/rgb2rgb.c
+--- ffmpeg-5.1/libswscale/x86/rgb2rgb.c.flto_inline_asm~	2022-07-22 19:58:40.000000000 +0200
++++ ffmpeg-5.1/libswscale/x86/rgb2rgb.c	2022-08-09 16:19:59.547808260 +0200
 @@ -38,7 +38,7 @@
  
  #if HAVE_INLINE_ASM
@@ -124,9 +124,9 @@ diff -up ffmpeg-4.4/libswscale/x86/rgb2rgb.c.flto_inline_asm~ ffmpeg-4.4/libswsc
  
  DECLARE_ALIGNED(8, extern const uint64_t, ff_bgr2YOffset);
  DECLARE_ALIGNED(8, extern const uint64_t, ff_w1111);
-diff -up ffmpeg-4.4/libswscale/x86/swscale.c.flto_inline_asm~ ffmpeg-4.4/libswscale/x86/swscale.c
---- ffmpeg-4.4/libswscale/x86/swscale.c.flto_inline_asm~	2021-04-09 18:07:36.149569656 +0200
-+++ ffmpeg-4.4/libswscale/x86/swscale.c	2021-04-09 18:10:53.628305472 +0200
+diff -up ffmpeg-5.1/libswscale/x86/swscale.c.flto_inline_asm~ ffmpeg-5.1/libswscale/x86/swscale.c
+--- ffmpeg-5.1/libswscale/x86/swscale.c.flto_inline_asm~	2022-08-09 16:19:59.548808235 +0200
++++ ffmpeg-5.1/libswscale/x86/swscale.c	2022-08-09 16:21:30.649494231 +0200
 @@ -42,16 +42,16 @@ const DECLARE_ALIGNED(8, uint64_t, ff_di
  
  #define DITHER1XBPP
@@ -152,5 +152,4 @@ diff -up ffmpeg-4.4/libswscale/x86/swscale.c.flto_inline_asm~ ffmpeg-4.4/libswsc
 +DECLARE_ASM_ALIGNED(8, __attribute__ ((externally_visible)) const uint64_t, ff_w1111)        = 0x0001000100010001ULL;
  
  
- //MMX versions
-diff -up ffmpeg-4.4/libswscale/x86/yuv2rgb.c.flto_inline_asm~ ffmpeg-4.4/libswscale/x86/yuv2rgb.c
+ // MMXEXT versions
