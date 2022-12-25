@@ -84,7 +84,7 @@ Name:		ffmpeg
 %define x264_major 163
 %define x265_major 199
 Version:	5.1.2
-Release:	1
+Release:	2
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -113,6 +113,7 @@ BuildRequires:	gsm-devel
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	ladspa-devel
 BuildRequires:	pkgconfig(libgme)
+BuildRequires:	pkgconfig(libjxl)
 BuildRequires:	gomp-devel
 %ifnarch %{riscv}
 BuildRequires:	pkgconfig(caca)
@@ -631,6 +632,7 @@ if ! ./configure \
 	--incdir=%{_includedir} \
 	--disable-stripping \
 	--enable-amf \
+	--enable-libjxl \
 	--enable-postproc \
 	--enable-gpl \
 	--enable-version3 \
