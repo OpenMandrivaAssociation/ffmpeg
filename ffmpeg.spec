@@ -81,10 +81,10 @@ Name:		ffmpeg
 # (tpg) BIG FAT WARNING !!!
 # ALWAYS RUN package-restricted-headers.sh
 # AND UPLOAD output file as SOURCE1
-%define x264_major 163
+%define x264_major 164
 %define x265_major 199
 Version:	5.1.2
-Release:	3
+Release:	4
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -104,6 +104,7 @@ Patch3:		ffmpeg-2.5-fix-build-with-flto-and-inline-assembly.patch
 # https://ffmpeg-devel.ffmpeg.narkive.com/qPHDqDaR/patch-1-5-avformat-adding-accessors-for-externally-used-avstream-fields-which-are-after-the-public#post8
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
+Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
 BuildRequires:	yasm
@@ -114,6 +115,7 @@ BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	ladspa-devel
 BuildRequires:	pkgconfig(libgme)
 BuildRequires:	pkgconfig(libjxl)
+BuildRequires:	vulkan-headers
 BuildRequires:	gomp-devel
 %ifnarch %{riscv}
 BuildRequires:	pkgconfig(caca)
@@ -480,6 +482,7 @@ This package contains the static libraries for %{name}.
 %endif
 %patch3 -p1 -b .flto_inline_asm~
 %patch4 -p1 -b .accessor~
+%patch5 -p1 -b .vulkan~
 
 # The debuginfo generator doesn't like non-world readable files
 find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
