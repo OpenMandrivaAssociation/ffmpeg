@@ -107,7 +107,9 @@ Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
-BuildRequires:	yasm
+%ifarch %{ix86} %{x86_64}
+BuildRequires:	nasm
+%endif
 BuildRequires:	pkgconfig(bzip2)
 BuildRequires:	flite-devel
 BuildRequires:	gsm-devel
