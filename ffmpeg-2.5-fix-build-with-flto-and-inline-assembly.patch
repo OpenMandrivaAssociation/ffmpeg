@@ -10,49 +10,6 @@ diff -up ffmpeg-5.1/libavcodec/cabac.c.flto_inline_asm~ ffmpeg-5.1/libavcodec/ca
      9,8,7,7,6,6,6,6,5,5,5,5,5,5,5,5,
      4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
      3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
-diff -up ffmpeg-5.1/libavcodec/x86/lpc.c.flto_inline_asm~ ffmpeg-5.1/libavcodec/x86/lpc.c
---- ffmpeg-5.1/libavcodec/x86/lpc.c.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
-+++ ffmpeg-5.1/libavcodec/x86/lpc.c	2022-08-09 16:19:59.547808260 +0200
-@@ -26,8 +26,8 @@
- #include "libavutil/x86/cpu.h"
- #include "libavcodec/lpc.h"
- 
--DECLARE_ASM_CONST(16, double, pd_1)[2] = { 1.0, 1.0 };
--DECLARE_ASM_CONST(16, double, pd_2)[2] = { 2.0, 2.0 };
-+DECLARE_ASM_CONST_VISIBLE(16, double, pd_1)[2] = { 1.0, 1.0 };
-+DECLARE_ASM_CONST_VISIBLE(16, double, pd_2)[2] = { 2.0, 2.0 };
- 
- #if HAVE_SSE2_INLINE
- 
-diff -up ffmpeg-5.1/libavutil/mem.h.flto_inline_asm~ ffmpeg-5.1/libavutil/mem.h
---- ffmpeg-5.1/libavutil/mem.h.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
-+++ ffmpeg-5.1/libavutil/mem.h	2022-08-09 16:19:59.547808260 +0200
-@@ -108,14 +108,16 @@
-     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
-     #define DECLARE_ASM_ALIGNED(n,t,v)  t __attribute__ ((aligned (n))) v
-     #define DECLARE_ASM_CONST(n,t,v)    const t __attribute__ ((aligned (n))) v
-+    #define DECLARE_ASM_CONST_VISIBLE(n,t,v)   __attribute__ ((externally_visible)) DECLARE_ASM_CONST(n,t,v)
- #elif defined(__DJGPP__)
-     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (FFMIN(n, 16)))) v
-     #define DECLARE_ASM_ALIGNED(n,t,v)  t av_used __attribute__ ((aligned (FFMIN(n, 16)))) v
-     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (FFMIN(n, 16)))) v
- #elif defined(__GNUC__) || defined(__clang__)
--    #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
-+    #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) __attribute__((used)) __attribute__((visibility("default"))) v
-     #define DECLARE_ASM_ALIGNED(n,t,v)  t av_used __attribute__ ((aligned (n))) v
-     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (n))) v
-+    #define DECLARE_ASM_CONST_VISIBLE(n,t,v)    __attribute__ ((externally_visible)) const t av_used __attribute__ ((aligned (n))) v
- #elif defined(_MSC_VER)
-     #define DECLARE_ALIGNED(n,t,v)      __declspec(align(n)) t v
-     #define DECLARE_ASM_ALIGNED(n,t,v)  __declspec(align(n)) t v
-@@ -124,6 +126,7 @@
-     #define DECLARE_ALIGNED(n,t,v)      t v
-     #define DECLARE_ASM_ALIGNED(n,t,v)  t v
-     #define DECLARE_ASM_CONST(n,t,v)    static const t v
-+    #define DECLARE_ASM_CONST_VISIBLE(n,t,v)    __attribute__((externally_visible)) const t v
- #endif
- 
- /**
 diff -up ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~ ffmpeg-5.1/libpostproc/postprocess.c
 --- ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
 +++ ffmpeg-5.1/libpostproc/postprocess.c	2022-08-09 16:19:59.547808260 +0200
