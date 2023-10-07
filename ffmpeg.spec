@@ -84,7 +84,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 199
 Version:	6.0
-Release:	3
+Release:	4
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -105,6 +105,7 @@ Patch2:		ffmpeg-1.0.1-time.h.patch
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
+Patch6:		ffmpeg-6.0-ffnvcodec-headers-12.1.14.patch
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
 %ifarch %{ix86} %{x86_64}
@@ -485,6 +486,7 @@ This package contains the static libraries for %{name}.
 #patch3 -p1 -b .flto_inline_asm~
 %patch4 -p1 -b .accessor~
 #patch5 -p1 -b .vulkan~
+%patch6 -p1 -b .nvcodec~
 
 # The debuginfo generator doesn't like non-world readable files
 find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
@@ -529,7 +531,7 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
-%ifnarch %{armx} %{arm} %{riscv}
+%ifarch %{ix86} %{x86_64}
 	--enable-nvenc \
 %endif
 	--enable-ffplay \
@@ -649,7 +651,7 @@ if ! ./configure \
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
-%ifnarch %{armx} %{arm} %{riscv}
+%ifarch %{ix86} %{x86_64}
 	--enable-nvenc \
 %endif
 	--enable-ffplay \
