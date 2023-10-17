@@ -632,13 +632,8 @@ cd ..
 # FIXME forcing gcc on aarch64 for now (ffmpeg 6.0, clang 16.0.1)
 # because of a link time failure
 if ! ./configure \
-%ifarch %{aarch64}
-	--cc=gcc \
-	--cxx=g++ \
-%else
 	--cc=%{__cc} \
 	--cxx=%{__cxx} \
-%endif
 	--prefix=%{_prefix} \
 	--enable-shared \
 	--libdir=%{_libdir} \
