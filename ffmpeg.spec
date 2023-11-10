@@ -83,8 +83,8 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 199
-Version:	6.0
-Release:	5
+Version:	6.0.1
+Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -105,7 +105,6 @@ Patch2:		ffmpeg-1.0.1-time.h.patch
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
-Patch6:		ffmpeg-6.0-ffnvcodec-headers-12.1.14.patch
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
 %ifarch %{ix86} %{x86_64}
@@ -486,7 +485,6 @@ This package contains the static libraries for %{name}.
 #patch3 -p1 -b .flto_inline_asm~
 %patch4 -p1 -b .accessor~
 #patch5 -p1 -b .vulkan~
-%patch6 -p1 -b .nvcodec~
 
 # The debuginfo generator doesn't like non-world readable files
 find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644
