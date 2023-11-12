@@ -1,0 +1,12 @@
+diff -up ffmpeg-6.1/libavcodec/avfft.c.omv~ ffmpeg-6.1/libavcodec/avfft.c
+--- ffmpeg-6.1/libavcodec/avfft.c.omv~	2023-11-12 02:46:05.409875499 +0100
++++ ffmpeg-6.1/libavcodec/avfft.c	2023-11-12 02:40:12.390212262 +0100
+@@ -46,7 +46,7 @@ FFTContext *av_fft_init(int nbits, int i
+ {
+     int ret;
+     float scale = 1.0f;
+-    AVTXWrapper *s = av_malloc(sizeof(*s));
++    AVTXWrapper *s = av_mallocz(sizeof(*s));
+     if (!s)
+         return NULL;
+ 
