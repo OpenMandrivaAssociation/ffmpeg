@@ -479,7 +479,6 @@ This package contains the static libraries for %{name}.
 %prep
 %setup -q -a 1
 %patch2 -p1 -b .timeh~
-%patch3 -p1 -b .crashfix~
 %if %{with dlopen}
 %patch1 -p1 -b .dlopen~
 %endif
