@@ -100,9 +100,6 @@ Source2:	restricted-defines.macros
 Source10:	package-restricted-headers.sh
 Patch1:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 Patch2:		ffmpeg-1.0.1-time.h.patch
-# Fix QMPlay2 crashing when switching from windowed to fullscreen mode
-# while a video is playing
-Patch3:		ffmpeg-6.1-fix-qmplay2-crash.patch
 #Patch3:		ffmpeg-2.5-fix-build-with-flto-and-inline-assembly.patch
 # https://ffmpeg-devel.ffmpeg.narkive.com/qPHDqDaR/patch-1-5-avformat-adding-accessors-for-externally-used-avstream-fields-which-are-after-the-public#post8
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
