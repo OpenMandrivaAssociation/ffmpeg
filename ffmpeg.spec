@@ -83,7 +83,7 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 199
-Version:	6.1
+Version:	6.1.1
 Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
