@@ -84,7 +84,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 199
 Version:	6.1.1
-Release:	1
+Release:	2
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
