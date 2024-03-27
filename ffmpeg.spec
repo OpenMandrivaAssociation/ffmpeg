@@ -84,7 +84,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 199
 Version:	6.1.1
-Release:	6
+Release:	7
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -107,6 +107,9 @@ Patch2:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 #Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
+%ifarch %{x86_64}
+Patch6:		ffmpeg-master-add-ability-for-ffmpeg-to-run-svt-vp9.patch
+%endif
 # From upstream git:
 Patch10:	ffmpeg-e06ce6d2b45edac4a2df04f304e18d4727417d24.patch
 BuildRequires:	AMF-devel
@@ -133,6 +136,9 @@ BuildRequires:	pkgconfig(fdk-aac)
 %endif
 BuildRequires:	pkgconfig(dav1d)
 BuildRequires:	pkgconfig(SvtAv1Enc)
+%ifarch %{x86_64}
+BuildRequires:	pkgconfig(SvtVp9Enc)
+%endif
 %ifnarch %{ix86} %{riscv} aarch64
 BuildRequires:	pkgconfig(rav1e)
 %endif
@@ -648,6 +654,9 @@ if ! ./configure \
 	--enable-ffplay \
 	--enable-libdav1d \
 	--enable-libsvtav1 \
+%ifarch %{x86_64}
+	--enable-libsvtvp9 \
+%endif
 %ifnarch %{ix86} aarch64
 	--enable-librav1e \
 %endif
