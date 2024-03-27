@@ -1,5 +1,5 @@
-diff -up ffmpeg-5.1/libavcodec/cabac.c.flto_inline_asm~ ffmpeg-5.1/libavcodec/cabac.c
---- ffmpeg-5.1/libavcodec/cabac.c.flto_inline_asm~	2022-08-09 16:19:59.546808285 +0200
+diff -up ffmpeg-5.1/libavcodec/cabac.c ffmpeg-5.1/libavcodec/cabac.c
+--- ffmpeg-5.1/libavcodec/cabac.c	2022-08-09 16:19:59.546808285 +0200
 +++ ffmpeg-5.1/libavcodec/cabac.c	2022-08-09 16:21:59.096771559 +0200
 @@ -29,7 +29,7 @@
  
@@ -10,8 +10,8 @@ diff -up ffmpeg-5.1/libavcodec/cabac.c.flto_inline_asm~ ffmpeg-5.1/libavcodec/ca
      9,8,7,7,6,6,6,6,5,5,5,5,5,5,5,5,
      4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
      3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
-diff -up ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~ ffmpeg-5.1/libpostproc/postprocess.c
---- ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~	2022-07-22 19:58:39.000000000 +0200
+diff -up ffmpeg-5.1/libpostproc/postprocess.c ffmpeg-5.1/libpostproc/postprocess.c
+--- ffmpeg-5.1/libpostproc/postprocess.c	2022-07-22 19:58:39.000000000 +0200
 +++ ffmpeg-5.1/libpostproc/postprocess.c	2022-08-09 16:19:59.547808260 +0200
 @@ -99,17 +99,17 @@ try to unroll inner for(x=0 ... loop to
  //#define NUM_BLOCKS_AT_ONCE 16 //not used yet
@@ -39,8 +39,8 @@ diff -up ffmpeg-5.1/libpostproc/postprocess.c.flto_inline_asm~ ffmpeg-5.1/libpos
  
  
  static const struct PPFilter filters[]=
-diff -up ffmpeg-5.1/libswscale/x86/rgb2rgb.c.flto_inline_asm~ ffmpeg-5.1/libswscale/x86/rgb2rgb.c
---- ffmpeg-5.1/libswscale/x86/rgb2rgb.c.flto_inline_asm~	2022-07-22 19:58:40.000000000 +0200
+diff -up ffmpeg-5.1/libswscale/x86/rgb2rgb.c ffmpeg-5.1/libswscale/x86/rgb2rgb.c
+--- ffmpeg-5.1/libswscale/x86/rgb2rgb.c	2022-07-22 19:58:40.000000000 +0200
 +++ ffmpeg-5.1/libswscale/x86/rgb2rgb.c	2022-08-09 16:19:59.547808260 +0200
 @@ -38,7 +38,7 @@
  
@@ -81,8 +81,8 @@ diff -up ffmpeg-5.1/libswscale/x86/rgb2rgb.c.flto_inline_asm~ ffmpeg-5.1/libswsc
  
  DECLARE_ALIGNED(8, extern const uint64_t, ff_bgr2YOffset);
  DECLARE_ALIGNED(8, extern const uint64_t, ff_w1111);
-diff -up ffmpeg-5.1/libswscale/x86/swscale.c.flto_inline_asm~ ffmpeg-5.1/libswscale/x86/swscale.c
---- ffmpeg-5.1/libswscale/x86/swscale.c.flto_inline_asm~	2022-08-09 16:19:59.548808235 +0200
+diff -up ffmpeg-5.1/libswscale/x86/swscale.c ffmpeg-5.1/libswscale/x86/swscale.c
+--- ffmpeg-5.1/libswscale/x86/swscale.c	2022-08-09 16:19:59.548808235 +0200
 +++ ffmpeg-5.1/libswscale/x86/swscale.c	2022-08-09 16:21:30.649494231 +0200
 @@ -42,16 +42,16 @@ const DECLARE_ALIGNED(8, uint64_t, ff_di
  

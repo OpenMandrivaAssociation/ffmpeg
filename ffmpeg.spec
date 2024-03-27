@@ -98,13 +98,15 @@ Source1:	restricted-multimedia-headers.tar.xz
 Source2:	restricted-defines.macros
 # Creates Source1
 Source10:	package-restricted-headers.sh
-Patch1:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
-Patch2:		ffmpeg-1.0.1-time.h.patch
+Patch1:		ffmpeg-1.0.1-time.h.patch
+%if %{with dlopen}
+Patch2:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
+%endif
 #Patch3:		ffmpeg-2.5-fix-build-with-flto-and-inline-assembly.patch
 # https://ffmpeg-devel.ffmpeg.narkive.com/qPHDqDaR/patch-1-5-avformat-adding-accessors-for-externally-used-avstream-fields-which-are-after-the-public#post8
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
-Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
+#Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
 # From upstream git:
 Patch10:	ffmpeg-e06ce6d2b45edac4a2df04f304e18d4727417d24.patch
 BuildRequires:	AMF-devel
@@ -479,15 +481,8 @@ This package contains the static libraries for %{name}.
 %endif
 
 %prep
-%setup -q -a 1
-%patch2 -p1 -b .timeh~
-%if %{with dlopen}
-%patch1 -p1 -b .dlopen~
-%endif
-%patch4 -p1 -b .accessor~
-#patch5 -p1 -b .vulkan~
-
-%patch10 -p1 -b .upstream2~
+%autosetup -p 1
+%setup -T -D -a 1 -q
 
 # The debuginfo generator doesn't like non-world readable files
 find . -name "*.c" -o -name "*.h" -o -name "*.asm" |xargs chmod 0644

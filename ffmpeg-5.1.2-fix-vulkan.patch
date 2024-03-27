@@ -1,5 +1,5 @@
-diff -up ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c.omv~ ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c
---- ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c.omv~	2023-02-01 13:11:01.052204236 +0100
+diff -up ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c
+--- ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c	2023-02-01 13:11:01.052204236 +0100
 +++ ffmpeg-5.1.2/libavutil/hwcontext_vulkan.c	2023-02-01 13:13:52.694812256 +0100
 @@ -360,8 +360,8 @@ static const VulkanOptExtension optional
      { VK_KHR_VIDEO_DECODE_QUEUE_EXTENSION_NAME,               FF_VK_EXT_NO_FLAG                },

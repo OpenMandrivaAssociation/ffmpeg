@@ -1,4 +1,4 @@
---- ffmpeg-3.3.4/configure.openjpeg22~	2017-10-05 17:43:08.914891006 +0200
+--- ffmpeg-3.3.4/configure	2017-10-05 17:43:08.914891006 +0200
 +++ ffmpeg-3.3.4/configure	2017-10-05 17:43:37.444816484 +0200
 @@ -1889,6 +1889,7 @@ HEADERS_LIST="
      machine_ioctl_meteor_h
@@ -19,7 +19,7 @@
                                 { check_lib openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
                                 { check_lib openjpeg-1.5/openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
                                 { check_lib openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC && add_cppflags -DOPJ_STATIC; } ||
---- ffmpeg-3.3.4/libavcodec/libopenjpegdec.c.openjpeg22~	2017-09-12 02:51:33.000000000 +0200
+--- ffmpeg-3.3.4/libavcodec/libopenjpegdec.c	2017-09-12 02:51:33.000000000 +0200
 +++ ffmpeg-3.3.4/libavcodec/libopenjpegdec.c	2017-10-05 17:43:08.924890980 +0200
 @@ -34,7 +34,9 @@
  #include "internal.h"
@@ -50,7 +50,7 @@
      opj_stream_set_user_data(stream, &reader, NULL);
  #elif HAVE_OPENJPEG_2_0_OPENJPEG_H
      opj_stream_set_user_data(stream, &reader);
---- ffmpeg-3.3.4/libavcodec/libopenjpegenc.c.openjpeg22~	2017-09-12 02:51:33.000000000 +0200
+--- ffmpeg-3.3.4/libavcodec/libopenjpegenc.c	2017-09-12 02:51:33.000000000 +0200
 +++ ffmpeg-3.3.4/libavcodec/libopenjpegenc.c	2017-10-05 17:43:08.925890977 +0200
 @@ -32,7 +32,9 @@
  #include "avcodec.h"

@@ -1,5 +1,5 @@
-diff -up ffmpeg-5.1/libavformat/avformat.h.accessor~ ffmpeg-5.1/libavformat/avformat.h
---- ffmpeg-5.1/libavformat/avformat.h.accessor~	2022-07-22 19:58:39.000000000 +0200
+diff -up ffmpeg-5.1/libavformat/avformat.h ffmpeg-5.1/libavformat/avformat.h
+--- ffmpeg-5.1/libavformat/avformat.h	2022-07-22 19:58:39.000000000 +0200
 +++ ffmpeg-5.1/libavformat/avformat.h	2022-08-09 16:22:27.150058854 +0200
 @@ -2904,4 +2904,9 @@ AVRational av_stream_get_codec_timebase(
   * @}
@@ -11,8 +11,8 @@ diff -up ffmpeg-5.1/libavformat/avformat.h.accessor~ ffmpeg-5.1/libavformat/avfo
 +int av_stream_get_pts_wrap_bits(AVStream *s);
 +int64_t av_stream_get_codec_info_nb_frames(AVStream *s);
  #endif /* AVFORMAT_AVFORMAT_H */
-diff -up ffmpeg-5.1/libavformat/utils.c.accessor~ ffmpeg-5.1/libavformat/utils.c
---- ffmpeg-5.1/libavformat/utils.c.accessor~	2022-08-09 16:22:27.150058854 +0200
+diff -up ffmpeg-5.1/libavformat/utils.c ffmpeg-5.1/libavformat/utils.c
+--- ffmpeg-5.1/libavformat/utils.c	2022-08-09 16:22:27.150058854 +0200
 +++ ffmpeg-5.1/libavformat/utils.c	2022-08-09 16:23:07.479034213 +0200
 @@ -602,3 +602,23 @@ int ff_bprint_to_codecpar_extradata(AVCo
      par->extradata_size = buf->len;

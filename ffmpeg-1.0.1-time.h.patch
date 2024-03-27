@@ -1,4 +1,4 @@
---- ffmpeg-1.0.1/libavutil/time.h.bero	2012-12-04 17:58:13.659811039 +0100
+--- ffmpeg-1.0.1/libavutil/time.h	2012-12-04 17:58:13.659811039 +0100
 +++ ffmpeg-1.0.1/libavutil/time.h	2012-12-04 17:58:45.039180838 +0100
 @@ -39,3 +39,9 @@ int64_t av_gettime(void);
  int av_usleep(unsigned usec);

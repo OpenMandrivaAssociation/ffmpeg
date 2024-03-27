@@ -1,5 +1,5 @@
-diff -up ffmpeg-6.1/configure.dlopen~ ffmpeg-6.1/configure
---- ffmpeg-6.1/configure.dlopen~	2023-11-11 01:25:17.000000000 +0100
+diff -up ffmpeg-6.1/configure ffmpeg-6.1/configure
+--- ffmpeg-6.1/configure	2023-11-11 01:25:17.000000000 +0100
 +++ ffmpeg-6.1/configure	2023-11-11 13:37:56.115258963 +0100
 @@ -228,6 +228,7 @@ External library support:
    --enable-libdc1394       enable IIDC-1394 grabbing using libdc1394
@@ -117,8 +117,8 @@ diff -up ffmpeg-6.1/configure.dlopen~ ffmpeg-6.1/configure
  enabled libzimg           && require_pkg_config libzimg "zimg >= 2.7.0" zimg.h zimg_get_api_version
  enabled libzmq            && require_pkg_config libzmq "libzmq >= 4.2.1" zmq.h zmq_ctx_new
  enabled libzvbi           && require_pkg_config libzvbi zvbi-0.2 libzvbi.h vbi_decoder_new &&
-diff -up ffmpeg-6.1/libavcodec/dlopen.h.dlopen~ ffmpeg-6.1/libavcodec/dlopen.h
---- ffmpeg-6.1/libavcodec/dlopen.h.dlopen~	2023-11-11 13:37:56.115258963 +0100
+diff -up ffmpeg-6.1/libavcodec/dlopen.h ffmpeg-6.1/libavcodec/dlopen.h
+--- ffmpeg-6.1/libavcodec/dlopen.h	2023-11-11 13:37:56.115258963 +0100
 +++ ffmpeg-6.1/libavcodec/dlopen.h	2023-11-11 13:37:56.115258963 +0100
 @@ -0,0 +1,13 @@
 +#ifndef LOCALINC_DLOPEN_H
@@ -134,8 +134,8 @@ diff -up ffmpeg-6.1/libavcodec/dlopen.h.dlopen~ ffmpeg-6.1/libavcodec/dlopen.h
 +		goto error;
 +
 +#endif
-diff -up ffmpeg-6.1/libavcodec/libfdk-aacdec.c.dlopen~ ffmpeg-6.1/libavcodec/libfdk-aacdec.c
---- ffmpeg-6.1/libavcodec/libfdk-aacdec.c.dlopen~	2023-11-10 01:30:15.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libfdk-aacdec.c ffmpeg-6.1/libavcodec/libfdk-aacdec.c
+--- ffmpeg-6.1/libavcodec/libfdk-aacdec.c	2023-11-10 01:30:15.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libfdk-aacdec.c	2023-11-11 13:37:56.115258963 +0100
 @@ -38,6 +38,54 @@
  #define AAC_PCM_MAX_OUTPUT_CHANNELS AAC_PCM_OUTPUT_CHANNELS
@@ -204,8 +204,8 @@ diff -up ffmpeg-6.1/libavcodec/libfdk-aacdec.c.dlopen~ ffmpeg-6.1/libavcodec/lib
      s->handle = aacDecoder_Open(avctx->extradata_size ? TT_MP4_RAW : TT_MP4_ADTS, 1);
      if (!s->handle) {
          av_log(avctx, AV_LOG_ERROR, "Error opening decoder\n");
-diff -up ffmpeg-6.1/libavcodec/libfdk-aacenc.c.dlopen~ ffmpeg-6.1/libavcodec/libfdk-aacenc.c
---- ffmpeg-6.1/libavcodec/libfdk-aacenc.c.dlopen~	2023-11-11 01:25:17.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libfdk-aacenc.c ffmpeg-6.1/libavcodec/libfdk-aacenc.c
+--- ffmpeg-6.1/libavcodec/libfdk-aacenc.c	2023-11-11 01:25:17.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libfdk-aacenc.c	2023-11-11 13:39:04.204829030 +0100
 @@ -37,6 +37,48 @@
  #define FDKENC_VER_AT_LEAST(vl0, vl1) 0
@@ -268,8 +268,8 @@ diff -up ffmpeg-6.1/libavcodec/libfdk-aacenc.c.dlopen~ ffmpeg-6.1/libavcodec/lib
      if ((err = aacEncOpen(&s->handle, 0, avctx->ch_layout.nb_channels)) != AACENC_OK) {
          av_log(avctx, AV_LOG_ERROR, "Unable to open the encoder: %s\n",
                 aac_get_error(err));
-diff -up ffmpeg-6.1/libavcodec/libmp3lame.c.dlopen~ ffmpeg-6.1/libavcodec/libmp3lame.c
---- ffmpeg-6.1/libavcodec/libmp3lame.c.dlopen~	2023-11-11 01:25:17.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libmp3lame.c ffmpeg-6.1/libavcodec/libmp3lame.c
+--- ffmpeg-6.1/libavcodec/libmp3lame.c	2023-11-11 01:25:17.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libmp3lame.c	2023-11-11 13:37:56.115258963 +0100
 @@ -39,6 +39,145 @@
  #include "mpegaudio.h"
@@ -429,8 +429,8 @@ diff -up ffmpeg-6.1/libavcodec/libmp3lame.c.dlopen~ ffmpeg-6.1/libavcodec/libmp3
      s->avctx = avctx;
  
      /* initialize LAME and get defaults */
-diff -up ffmpeg-6.1/libavcodec/libopencore-amr.c.dlopen~ ffmpeg-6.1/libavcodec/libopencore-amr.c
---- ffmpeg-6.1/libavcodec/libopencore-amr.c.dlopen~	2023-11-11 01:25:17.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libopencore-amr.c ffmpeg-6.1/libavcodec/libopencore-amr.c
+--- ffmpeg-6.1/libavcodec/libopencore-amr.c	2023-11-11 01:25:17.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libopencore-amr.c	2023-11-11 13:37:56.115258963 +0100
 @@ -33,6 +33,107 @@
  #include "decode.h"
@@ -585,8 +585,8 @@ diff -up ffmpeg-6.1/libavcodec/libopencore-amr.c.dlopen~ ffmpeg-6.1/libavcodec/l
      s->state        = D_IF_init();
  
      return 0;
-diff -up ffmpeg-6.1/libavcodec/libx264.c.dlopen~ ffmpeg-6.1/libavcodec/libx264.c
---- ffmpeg-6.1/libavcodec/libx264.c.dlopen~	2023-11-11 01:25:17.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libx264.c ffmpeg-6.1/libavcodec/libx264.c
+--- ffmpeg-6.1/libavcodec/libx264.c	2023-11-11 01:25:17.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libx264.c	2023-11-11 13:37:56.116258972 +0100
 @@ -46,6 +46,128 @@
  #include <stdlib.h>
@@ -729,8 +729,8 @@ diff -up ffmpeg-6.1/libavcodec/libx264.c.dlopen~ ffmpeg-6.1/libavcodec/libx264.c
  #if CONFIG_LIBX262_ENCODER
      if (avctx->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
          x4->params.b_mpeg2 = 1;
-diff -up ffmpeg-6.1/libavcodec/libx265.c.dlopen~ ffmpeg-6.1/libavcodec/libx265.c
---- ffmpeg-6.1/libavcodec/libx265.c.dlopen~	2023-11-11 01:25:17.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libx265.c ffmpeg-6.1/libavcodec/libx265.c
+--- ffmpeg-6.1/libavcodec/libx265.c	2023-11-11 01:25:17.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libx265.c	2023-11-11 13:37:56.116258972 +0100
 @@ -41,6 +41,39 @@
  #include "atsc_a53.h"
@@ -783,8 +783,8 @@ diff -up ffmpeg-6.1/libavcodec/libx265.c.dlopen~ ffmpeg-6.1/libavcodec/libx265.c
      if (x265_api_get(12))
          codec->p.pix_fmts = x265_csp_twelve;
      else if (x265_api_get(10))
-diff -up ffmpeg-6.1/libavcodec/libxvid.c.dlopen~ ffmpeg-6.1/libavcodec/libxvid.c
---- ffmpeg-6.1/libavcodec/libxvid.c.dlopen~	2023-11-10 01:30:15.000000000 +0100
+diff -up ffmpeg-6.1/libavcodec/libxvid.c ffmpeg-6.1/libavcodec/libxvid.c
+--- ffmpeg-6.1/libavcodec/libxvid.c	2023-11-10 01:30:15.000000000 +0100
 +++ ffmpeg-6.1/libavcodec/libxvid.c	2023-11-11 13:37:56.116258972 +0100
 @@ -51,6 +51,61 @@
  #include <io.h>
