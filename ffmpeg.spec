@@ -3,31 +3,46 @@
 %bcond_without compat32
 %endif
 
-%define major 60
-%define ppmajor 57
-%define avumajor 58
-%define swsmajor 7
-%define filtermajor 9
-%define swrmajor 4
-%define libavcodec %mklibname avcodec %{major}
-%define libavdevice %mklibname avdevice %{major}
-%define libavfilter %mklibname avfilter %{filtermajor}
-%define libavformat %mklibname avformat %{major}
-%define libavutil %mklibname avutil %{avumajor}
-%define libpostproc %mklibname postproc %{ppmajor}
-%define libswresample %mklibname swresample %{swrmajor}
-%define libswscale %mklibname swscale %{swsmajor}
-%define lib32avcodec %mklib32name avcodec %{major}
-%define lib32avdevice %mklib32name avdevice %{major}
-%define lib32avfilter %mklib32name avfilter %{filtermajor}
-%define lib32avformat %mklib32name avformat %{major}
-%define lib32avutil %mklib32name avutil %{avumajor}
-%define lib32postproc %mklib32name postproc %{ppmajor}
-%define lib32swresample %mklib32name swresample %{swrmajor}
-%define lib32swscale %mklib32name swscale %{swsmajor}
-# Workaround for incorrect naming in previous version.
-# Can be dropped on next soname bump.
-%define oldlibswscale %mklibname swscaler %{swsmajor}
+%define major 61
+%define ppmajor 58
+%define avumajor 59
+%define swsmajor 8
+%define filtermajor 10
+%define swrmajor 5
+%define libavcodec %mklibname avcodec
+%define libavdevice %mklibname avdevice
+%define libavfilter %mklibname avfilter
+%define libavformat %mklibname avformat
+%define libavutil %mklibname avutil
+%define libpostproc %mklibname postproc
+%define libswresample %mklibname swresample
+%define libswscale %mklibname swscale
+%define lib32avcodec %mklib32name avcodec
+%define lib32avdevice %mklib32name avdevice
+%define lib32avfilter %mklib32name avfilter
+%define lib32avformat %mklib32name avformat
+%define lib32avutil %mklib32name avutil
+%define lib32postproc %mklib32name postproc
+%define lib32swresample %mklib32name swresample
+%define lib32swscale %mklib32name swscale
+# Last versions with versioned names
+%define oldlibavcodec %mklibname avcodec 60
+%define oldlibavdevice %mklibname avdevice 60
+%define oldlibavfilter %mklibname avfilter 9
+%define oldlibavformat %mklibname avformat 60
+%define oldlibavutil %mklibname avutil 58
+%define oldlibpostproc %mklibname postproc 57
+%define oldlibswresample %mklibname swresample 4
+%define oldlibswscale %mklibname swscale 7
+%define oldlib32avcodec %mklib32name avcodec 60
+%define oldlib32avdevice %mklib32name avdevice 60
+%define oldlib32avfilter %mklib32name avfilter 9
+%define oldlib32avformat %mklib32name avformat 60
+%define oldlib32avutil %mklib32name avutil 58
+%define oldlib32postproc %mklib32name postproc 57
+%define oldlib32swresample %mklib32name swresample 4
+%define oldlib32swscale %mklib32name swscale 7
+
 %define devname %mklibname %{name} -d
 %define statname %mklibname %{name} -s -d
 %define dev32name %mklib32name %{name} -d
@@ -83,8 +98,8 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 199
-Version:	6.1.1
-Release:	7
+Version:	7.0
+Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -111,7 +126,7 @@ Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 Patch6:		ffmpeg-master-add-ability-for-ffmpeg-to-run-svt-vp9.patch
 %endif
 # From upstream git:
-Patch10:	ffmpeg-e06ce6d2b45edac4a2df04f304e18d4727417d24.patch
+# (currently nothing backported)
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
 %ifarch %{ix86} %{x86_64}
@@ -302,7 +317,7 @@ Suggests:	libfdk-aac.so.2%{_arch_tag_suffix}
 %endif
 %endif
 Requires:	vdpau-drivers
-Obsoletes:	%{_lib}ffmpeg54 < 1.1-3
+%rename %{oldlibavcodec}
 
 %description -n %{libavcodec}
 This package contains a shared library for %{name}.
@@ -310,7 +325,7 @@ This package contains a shared library for %{name}.
 %package -n %{libavdevice}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
-Conflicts:	%{_lib}avformats54 < 1.1-3
+%rename %{oldlibavdevice}
 
 %description -n %{libavdevice}
 This package contains a shared library for %{name}.
@@ -318,6 +333,7 @@ This package contains a shared library for %{name}.
 %package -n %{libavfilter}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
+%rename %{oldlibavfilter}
 
 %description -n %{libavfilter}
 This package contains a shared library for %{name}.
@@ -325,7 +341,7 @@ This package contains a shared library for %{name}.
 %package -n %{libavformat}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
-Obsoletes:	%{_lib}avformats54 < 1.1-3
+%rename %{oldlibavformat}
 
 %description -n %{libavformat}
 This package contains a shared library for %{name}.
@@ -333,7 +349,7 @@ This package contains a shared library for %{name}.
 %package -n %{libavutil}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
-Obsoletes:	%{mklibname avutil 51} < 1.1
+%rename %{oldlibavutil}
 
 %description -n %{libavutil}
 This package contains a shared library for %{name}.
@@ -341,6 +357,7 @@ This package contains a shared library for %{name}.
 %package -n %{libpostproc}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
+%rename %{oldlibpostproc}
 
 %description -n %{libpostproc}
 This package contains a shared library for %{name}.
@@ -348,6 +365,7 @@ This package contains a shared library for %{name}.
 %package -n %{libswresample}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
+%rename %{oldlibswresample}
 
 %description -n %{libswresample}
 This package contains a shared library for %{name}.
@@ -404,6 +422,7 @@ Suggests:	libmp3lame.so.0
 Suggests:	libxvidcore.so.4
 Suggests:	libfdk-aac.so.2
 Requires:	libvdpau-drivers
+%rename %{oldlib32avcodec}
 
 %description -n %{lib32avcodec}
 This package contains a shared library for %{name}.
@@ -411,6 +430,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32avdevice}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32avdevice}
 
 %description -n %{lib32avdevice}
 This package contains a shared library for %{name}.
@@ -418,6 +438,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32avfilter}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32avfilter}
 
 %description -n %{lib32avfilter}
 This package contains a shared library for %{name}.
@@ -425,6 +446,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32avformat}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32avformat}
 
 %description -n %{lib32avformat}
 This package contains a shared library for %{name}.
@@ -432,6 +454,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32avutil}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32avutil}
 
 %description -n %{lib32avutil}
 This package contains a shared library for %{name}.
@@ -439,6 +462,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32postproc}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32postproc}
 
 %description -n %{lib32postproc}
 This package contains a shared library for %{name}.
@@ -446,6 +470,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32swresample}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32swresample}
 
 %description -n %{lib32swresample}
 This package contains a shared library for %{name}.
@@ -454,6 +479,7 @@ This package contains a shared library for %{name}.
 %package -n %{lib32swscale}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
+%rename %{oldlib32swscale}
 
 %description -n %{lib32swscale}
 This package contains a shared library for %{name}.
