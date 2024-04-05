@@ -99,7 +99,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 199
 Version:	7.0
-Release:	1
+Release:	2
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -191,7 +191,9 @@ BuildRequires:	pkgconfig(libzmq)
 %ifarch x86_64
 # intel-mediasdk -- for now, useless on anything but x86_64
 # (yes, even znver1 -- AMD CPUs don't have builtin Intel GPUs)
-BuildRequires:	pkgconfig(libmfx)
+#BuildRequires:	pkgconfig(libmfx)
+# Media-sdk is deprecated and replaced by vpl. FFmpeg support both but can be compiled wih only one. Pick up new vpl.
+BuildRequires:  pkgconfig(vpl)
 %endif
 %ifnarch %{riscv}
 BuildRequires:	pkgconfig(openal)
@@ -707,7 +709,7 @@ if ! ./configure \
 	--enable-libgsm \
 	--enable-libcelt \
 %ifarch x86_64
-	--enable-libmfx \
+	--enable-libvpl \
 %endif
 %if %{with opencv}
 	--enable-libopencv \
