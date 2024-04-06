@@ -154,7 +154,7 @@ BuildRequires:	pkgconfig(SvtAv1Enc)
 %ifarch %{x86_64}
 BuildRequires:	pkgconfig(SvtVp9Enc)
 %endif
-%ifnarch %{ix86} %{riscv} aarch64
+%ifnarch %{ix86} %{riscv}
 BuildRequires:	pkgconfig(rav1e)
 %endif
 %ifnarch %{riscv}
@@ -676,7 +676,7 @@ if ! ./configure \
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} %{x86_64} aarch64
 	--enable-nvenc \
 %endif
 	--enable-ffplay \
@@ -685,7 +685,7 @@ if ! ./configure \
 %ifarch %{x86_64}
 	--enable-libsvtvp9 \
 %endif
-%ifnarch %{ix86} aarch64
+%ifnarch %{ix86}
 	--enable-librav1e \
 %endif
 	--enable-libaom \
