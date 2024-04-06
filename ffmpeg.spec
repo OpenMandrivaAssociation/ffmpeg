@@ -99,7 +99,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 199
 Version:	7.0
-Release:	1
+Release:	2
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -154,7 +154,7 @@ BuildRequires:	pkgconfig(SvtAv1Enc)
 %ifarch %{x86_64}
 BuildRequires:	pkgconfig(SvtVp9Enc)
 %endif
-%ifnarch %{ix86} %{riscv} aarch64
+%ifnarch %{ix86} %{riscv}
 BuildRequires:	pkgconfig(rav1e)
 %endif
 %ifnarch %{riscv}
@@ -188,10 +188,12 @@ BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(libwebp)
 BuildRequires:	pkgconfig(libzmq)
-%ifarch x86_64
+%ifarch %{x86_64}
 # intel-mediasdk -- for now, useless on anything but x86_64
-# (yes, even znver1 -- AMD CPUs don't have builtin Intel GPUs)
-BuildRequires:	pkgconfig(libmfx)
+# but vpl can be used on Intel ARC GPU which also works on AMD Znver
+#BuildRequires:	pkgconfig(libmfx)
+# Media-sdk is deprecated and replaced by vpl. FFmpeg support both but can be compiled wih only one. Pick up new vpl.
+BuildRequires:  pkgconfig(vpl)
 %endif
 %ifnarch %{riscv}
 BuildRequires:	pkgconfig(openal)
@@ -674,7 +676,7 @@ if ! ./configure \
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
-%ifarch %{ix86} %{x86_64}
+%ifarch %{ix86} %{x86_64} aarch64
 	--enable-nvenc \
 %endif
 	--enable-ffplay \
@@ -683,7 +685,7 @@ if ! ./configure \
 %ifarch %{x86_64}
 	--enable-libsvtvp9 \
 %endif
-%ifnarch %{ix86} aarch64
+%ifnarch %{ix86}
 	--enable-librav1e \
 %endif
 	--enable-libaom \
@@ -707,7 +709,7 @@ if ! ./configure \
 	--enable-libgsm \
 	--enable-libcelt \
 %ifarch x86_64
-	--enable-libmfx \
+	--enable-libvpl \
 %endif
 %if %{with opencv}
 	--enable-libopencv \
