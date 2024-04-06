@@ -188,9 +188,9 @@ BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(libwebp)
 BuildRequires:	pkgconfig(libzmq)
-%ifarch x86_64
+%ifarch %{x86_64}
 # intel-mediasdk -- for now, useless on anything but x86_64
-# (yes, even znver1 -- AMD CPUs don't have builtin Intel GPUs)
+# but vpl can be used on Intel ARC GPU which also works on AMD Znver
 #BuildRequires:	pkgconfig(libmfx)
 # Media-sdk is deprecated and replaced by vpl. FFmpeg support both but can be compiled wih only one. Pick up new vpl.
 BuildRequires:  pkgconfig(vpl)
