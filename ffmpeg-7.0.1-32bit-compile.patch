@@ -1,0 +1,12 @@
+diff -up ffmpeg-7.0.1/libavutil/hwcontext_vaapi.c.omv~ ffmpeg-7.0.1/libavutil/hwcontext_vaapi.c
+--- ffmpeg-7.0.1/libavutil/hwcontext_vaapi.c.omv~	2024-05-26 14:40:54.463728311 +0200
++++ ffmpeg-7.0.1/libavutil/hwcontext_vaapi.c	2024-05-26 14:43:15.105347671 +0200
+@@ -1213,7 +1213,7 @@ static int vaapi_map_from_drm(AVHWFrames
+ 
+     if (!use_prime2 || vas != VA_STATUS_SUCCESS) {
+         int k;
+-        unsigned long buffer_handle;
++        uintptr_t buffer_handle;
+         VASurfaceAttribExternalBuffers buffer_desc;
+         VASurfaceAttrib buffer_attrs[2] = {
+             {
