@@ -97,9 +97,9 @@ Name:		ffmpeg
 # ALWAYS RUN package-restricted-headers.sh
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
-%define x265_major 199
+%define x265_major 209
 Version:	7.0.1
-Release:	1
+Release:	2
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
