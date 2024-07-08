@@ -99,7 +99,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 209
 Version:	7.0.1
-Release:	2
+Release:	3
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
