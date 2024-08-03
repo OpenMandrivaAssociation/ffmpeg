@@ -98,8 +98,8 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 209
-Version:	7.0.1
-Release:	3
+Version:	7.0.2
+Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -125,7 +125,6 @@ Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 %ifarch %{x86_64}
 Patch6:		ffmpeg-master-add-ability-for-ffmpeg-to-run-svt-vp9.patch
 %endif
-Patch7:		ffmpeg-7.0.1-32bit-compile.patch
 # From upstream git:
 # (currently nothing backported)
 BuildRequires:	AMF-devel
