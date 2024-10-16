@@ -98,7 +98,7 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 209
-Version:	7.0.2
+Version:	7.1
 Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
@@ -122,9 +122,6 @@ Patch2:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 #Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
-%ifarch %{x86_64}
-Patch6:		ffmpeg-master-add-ability-for-ffmpeg-to-run-svt-vp9.patch
-%endif
 # From upstream git:
 # (currently nothing backported)
 BuildRequires:	AMF-devel
@@ -682,9 +679,6 @@ if ! ./configure \
 	--enable-ffplay \
 	--enable-libdav1d \
 	--enable-libsvtav1 \
-%ifarch %{x86_64}
-	--enable-libsvtvp9 \
-%endif
 %ifnarch %{ix86}
 	--enable-librav1e \
 %endif
