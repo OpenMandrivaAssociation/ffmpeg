@@ -107,7 +107,7 @@ License:	GPLv3+
 License:	GPLv2+
 %endif
 Group:		Video
-Url:		http://ffmpeg.org/
+Url:		https://ffmpeg.org/
 Source0:	http://ffmpeg.org/releases/%{name}-%{version}.tar.xz
 Source1:	restricted-multimedia-headers.tar.xz
 Source2:	restricted-defines.macros
