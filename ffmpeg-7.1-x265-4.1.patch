@@ -1,0 +1,30 @@
+diff -up ffmpeg-7.1/libavcodec/libx265.c.omv~ ffmpeg-7.1/libavcodec/libx265.c
+--- ffmpeg-7.1/libavcodec/libx265.c.omv~	2024-12-01 23:30:51.784020805 +0100
++++ ffmpeg-7.1/libavcodec/libx265.c	2024-12-01 23:31:16.844320355 +0100
+@@ -702,7 +702,7 @@ static int libx265_encode_frame(AVCodecC
+ {
+     libx265Context *ctx = avctx->priv_data;
+     x265_picture x265pic;
+-#if X265_BUILD >= 210
++#if X265_BUILD >= 210 && X265_BUILD < 215
+     x265_picture x265pic_layers_out[MAX_SCALABLE_LAYERS];
+     x265_picture* x265pic_lyrptr_out[MAX_SCALABLE_LAYERS];
+ #else
+@@ -846,7 +846,7 @@ static int libx265_encode_frame(AVCodecC
+ #endif
+     }
+ 
+-#if X265_BUILD >= 210
++#if X265_BUILD >= 210 && X265_BUILD < 215
+     for (i = 0; i < MAX_SCALABLE_LAYERS; i++)
+         x265pic_lyrptr_out[i] = &x265pic_layers_out[i];
+ 
+@@ -885,7 +885,7 @@ static int libx265_encode_frame(AVCodecC
+             pkt->flags |= AV_PKT_FLAG_KEY;
+     }
+ 
+-#if X265_BUILD >= 210
++#if X265_BUILD >= 210 && X265_BUILD < 215
+     x265pic_out = x265pic_lyrptr_out[0];
+ #else
+     x265pic_out = &x265pic_solo_out;

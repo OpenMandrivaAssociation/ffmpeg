@@ -122,6 +122,7 @@ Patch2:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 # Generally useless but harmless, but seems to be needed by some versions of Opera, so let's keep it here for now
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 #Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
+Patch6:		ffmpeg-7.1-x265-4.1.patch
 # From upstream git:
 # (currently nothing backported)
 BuildRequires:	AMF-devel
