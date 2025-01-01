@@ -99,7 +99,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 215
 Version:	7.1
-Release:	3
+Release:	4
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -123,6 +123,10 @@ Patch2:		ffmpeg-4.3-dlopen-faac-mp3lame-opencore-x264-x265-xvid.patch
 Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 #Patch5:		ffmpeg-5.1.2-fix-vulkan.patch
 Patch6:		ffmpeg-7.1-x265-4.1.patch
+%ifarch %{x86_64}
+# https://github.com/OpenVisualCloud/SVT-VP9/blob/master/ffmpeg_plugin/master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
+Patch7:		master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
+%endif
 # From upstream git:
 # (currently nothing backported)
 BuildRequires:	AMF-devel
@@ -680,6 +684,9 @@ if ! ./configure \
 	--enable-ffplay \
 	--enable-libdav1d \
 	--enable-libsvtav1 \
+%ifarch %{x86_64}
+	--enable-libsvtvp9 \
+%endif
 %ifnarch %{ix86}
 	--enable-librav1e \
 %endif
