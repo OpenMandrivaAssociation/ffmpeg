@@ -72,7 +72,7 @@
 %bcond_without swscaler
 %bcond_with faac
 
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 # OpenCV, Soxr and PulseAudio use ffmpeg - can't link to them
 # while bootstrapping...
