@@ -134,7 +134,7 @@ BuildRequires:	texi2html
 BuildRequires:	nasm
 %endif
 BuildRequires:	pkgconfig(bzip2)
-BuildRequires:	flite-devel
+#BuildRequires:	flite-devel
 BuildRequires:	gsm-devel
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	ladspa-devel
@@ -755,7 +755,7 @@ if ! ./configure \
 %if 0
 	--enable-libshine \
 %endif
-	--enable-libflite \
+	--disable-libflite \
 	--enable-libxcb \
 	--enable-libxcb-shm \
 	--enable-libxcb-xfixes \
