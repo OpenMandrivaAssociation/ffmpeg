@@ -682,9 +682,9 @@ if ! ./configure \
 %endif
 	--enable-ffplay \
 	--enable-libdav1d \
-	--enable-libsvtav1 \
+	--disable-libsvtav1 \
 %ifarch %{x86_64}
-	--enable-libsvtvp9 \
+	--disable-libsvtvp9 \
 %endif
 %ifnarch %{ix86}
 	--enable-librav1e \
