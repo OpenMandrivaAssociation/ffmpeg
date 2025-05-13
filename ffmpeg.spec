@@ -181,7 +181,7 @@ BuildRequires:	pkgconfig(libmodplug)
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(libpng)
 %if %{with pulse}
-BuildRequires:	pkgconfig(libpulse)
+#BuildRequires:	pkgconfig(libpulse)
 %endif
 BuildRequires:	pkgconfig(librtmp)
 BuildRequires:	pkgconfig(libssh)
