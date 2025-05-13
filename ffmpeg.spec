@@ -200,7 +200,7 @@ BuildRequires:  pkgconfig(vpl)
 BuildRequires:	pkgconfig(openal)
 %endif
 %if %{with opencv}
-BuildRequires:	pkgconfig(opencv)
+#BuildRequires:	pkgconfig(opencv)
 BuildRequires:	pkgconfig(frei0r)
 %endif
 BuildRequires:	pkgconfig(opus)
