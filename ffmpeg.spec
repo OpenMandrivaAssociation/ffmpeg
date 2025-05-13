@@ -134,7 +134,7 @@ BuildRequires:	texi2html
 BuildRequires:	nasm
 %endif
 BuildRequires:	pkgconfig(bzip2)
-BuildRequires:	flite-devel
+#BuildRequires:	flite-devel
 BuildRequires:	gsm-devel
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	ladspa-devel
@@ -151,9 +151,9 @@ BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(fdk-aac)
 %endif
 BuildRequires:	pkgconfig(dav1d)
-BuildRequires:	pkgconfig(SvtAv1Enc)
+#BuildRequires:	pkgconfig(SvtAv1Enc)
 %ifarch %{x86_64}
-BuildRequires:	pkgconfig(SvtVp9Enc)
+#BuildRequires:	pkgconfig(SvtVp9Enc)
 %endif
 %ifnarch %{ix86} %{riscv}
 BuildRequires:	pkgconfig(rav1e)
@@ -210,7 +210,7 @@ BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(shine)
 %endif
 %if %{with soxr}
-BuildRequires:	pkgconfig(soxr)
+#BuildRequires:	pkgconfig(soxr)
 %endif
 BuildRequires:	pkgconfig(theora)
 BuildRequires:	pkgconfig(twolame)
