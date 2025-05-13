@@ -713,7 +713,7 @@ if ! ./configure \
 	--enable-libvpl \
 %endif
 %if %{with opencv}
-	--enable-libopencv \
+	--disable-libopencv \
 	--enable-frei0r \
 %endif
 	--enable-libopenjpeg \
