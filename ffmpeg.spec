@@ -724,7 +724,7 @@ if ! ./configure \
 	--enable-gnutls \
 	--enable-libcdio \
 %if %{with pulse}
-	--enable-libpulse \
+	--disable-libpulse \
 %endif
 	--enable-libv4l2 \
 %ifnarch %{riscv}
