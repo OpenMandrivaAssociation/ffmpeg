@@ -590,7 +590,7 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--enable-gnutls \
 	--disable-libcdio \
 %if %{with pulse}
-	--enable-libpulse \
+	--disable-libpulse \
 %endif
 	--enable-libv4l2 \
 %ifnarch %{riscv}
