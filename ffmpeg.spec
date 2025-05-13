@@ -602,7 +602,7 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--disable-libzvbi \
 	--disable-libssh \
 %if %{with soxr}
-	--enable-libsoxr \
+	--disable-libsoxr \
 %endif
 	--disable-libtwolame \
 	--enable-libopus \
@@ -737,7 +737,7 @@ if ! ./configure \
 %endif
 	--enable-libssh \
 %if %{with soxr}
-	--enable-libsoxr \
+	--disable-libsoxr \
 %endif
 	--enable-libtwolame \
 	--enable-libopus \
