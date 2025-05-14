@@ -72,7 +72,7 @@
 %bcond_without swscaler
 %bcond_with faac
 
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 # OpenCV, Soxr and PulseAudio use ffmpeg - can't link to them
 # while bootstrapping...
@@ -99,7 +99,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 215
 Version:	7.1.1
-Release:	2
+Release:	3
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -134,7 +134,7 @@ BuildRequires:	texi2html
 BuildRequires:	nasm
 %endif
 BuildRequires:	pkgconfig(bzip2)
-#BuildRequires:	flite-devel
+BuildRequires:	flite-devel
 BuildRequires:	gsm-devel
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	ladspa-devel
@@ -151,9 +151,9 @@ BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(fdk-aac)
 %endif
 BuildRequires:	pkgconfig(dav1d)
-#BuildRequires:	pkgconfig(SvtAv1Enc)
+BuildRequires:	pkgconfig(SvtAv1Enc)
 %ifarch %{x86_64}
-#BuildRequires:	pkgconfig(SvtVp9Enc)
+BuildRequires:	pkgconfig(SvtVp9Enc)
 %endif
 %ifnarch %{ix86} %{riscv}
 BuildRequires:	pkgconfig(rav1e)
@@ -181,7 +181,7 @@ BuildRequires:	pkgconfig(libmodplug)
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(libpng)
 %if %{with pulse}
-#BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(libpulse)
 %endif
 BuildRequires:	pkgconfig(librtmp)
 BuildRequires:	pkgconfig(libssh)
@@ -200,7 +200,7 @@ BuildRequires:  pkgconfig(vpl)
 BuildRequires:	pkgconfig(openal)
 %endif
 %if %{with opencv}
-#BuildRequires:	pkgconfig(opencv)
+BuildRequires:	pkgconfig(opencv)
 BuildRequires:	pkgconfig(frei0r)
 %endif
 BuildRequires:	pkgconfig(opus)
@@ -210,7 +210,7 @@ BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(shine)
 %endif
 %if %{with soxr}
-#BuildRequires:	pkgconfig(soxr)
+BuildRequires:	pkgconfig(soxr)
 %endif
 BuildRequires:	pkgconfig(theora)
 BuildRequires:	pkgconfig(twolame)
@@ -590,7 +590,7 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--enable-gnutls \
 	--disable-libcdio \
 %if %{with pulse}
-	--disable-libpulse \
+	--enable-libpulse \
 %endif
 	--enable-libv4l2 \
 %ifnarch %{riscv}
@@ -602,7 +602,7 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--disable-libzvbi \
 	--disable-libssh \
 %if %{with soxr}
-	--disable-libsoxr \
+	--enable-libsoxr \
 %endif
 	--disable-libtwolame \
 	--enable-libopus \
@@ -682,9 +682,9 @@ if ! ./configure \
 %endif
 	--enable-ffplay \
 	--enable-libdav1d \
-	--disable-libsvtav1 \
+	--enable-libsvtav1 \
 %ifarch %{x86_64}
-	--disable-libsvtvp9 \
+	--enable-libsvtvp9 \
 %endif
 %ifnarch %{ix86}
 	--enable-librav1e \
@@ -713,7 +713,7 @@ if ! ./configure \
 	--enable-libvpl \
 %endif
 %if %{with opencv}
-	--disable-libopencv \
+	--enable-libopencv \
 	--enable-frei0r \
 %endif
 	--enable-libopenjpeg \
@@ -724,7 +724,7 @@ if ! ./configure \
 	--enable-gnutls \
 	--enable-libcdio \
 %if %{with pulse}
-	--disable-libpulse \
+	--enable-libpulse \
 %endif
 	--enable-libv4l2 \
 %ifnarch %{riscv}
@@ -737,7 +737,7 @@ if ! ./configure \
 %endif
 	--enable-libssh \
 %if %{with soxr}
-	--disable-libsoxr \
+	--enable-libsoxr \
 %endif
 	--enable-libtwolame \
 	--enable-libopus \
@@ -755,7 +755,7 @@ if ! ./configure \
 %if 0
 	--enable-libshine \
 %endif
-	--disable-libflite \
+	--enable-libflite \
 	--enable-libxcb \
 	--enable-libxcb-shm \
 	--enable-libxcb-xfixes \
