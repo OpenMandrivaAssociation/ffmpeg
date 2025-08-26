@@ -3,12 +3,11 @@
 %bcond_without compat32
 %endif
 
-%define major 61
-%define ppmajor 58
-%define avumajor 59
-%define swsmajor 8
-%define filtermajor 10
-%define swrmajor 5
+%define major 62
+%define avumajor 60
+%define swsmajor 9
+%define filtermajor 11
+%define swrmajor 6
 %define libavcodec %mklibname avcodec
 %define libavdevice %mklibname avdevice
 %define libavfilter %mklibname avfilter
@@ -98,7 +97,7 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 215
-Version:	7.1.1
+Version:	8.0
 Release:	5
 # BIG FAT WARNING !!!
 %if %{build_plf}
@@ -125,6 +124,8 @@ Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 %ifarch %{x86_64}
 # https://github.com/OpenVisualCloud/SVT-VP9/blob/master/ffmpeg_plugin/master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 Patch7:		master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
+# Fix the results of patch7 to work with ffmpeg 8
+Patch8:		ffmpeg-stv-vp9-port-to-8.0.patch
 %endif
 # From upstream git:
 # (currently nothing backported)
@@ -321,6 +322,8 @@ Suggests:	libfdk-aac.so.2%{_arch_tag_suffix}
 %endif
 Requires:	vdpau-drivers
 %rename %{oldlibavcodec}
+Obsoletes:	%{libpostproc} < %{EVRD}
+Obsoletes:	%{oldlibpostproc} < %{EVRD}
 
 %description -n %{libavcodec}
 This package contains a shared library for %{name}.
@@ -357,14 +360,6 @@ Group:		System/Libraries
 %description -n %{libavutil}
 This package contains a shared library for %{name}.
 
-%package -n %{libpostproc}
-Summary:	Shared library part of ffmpeg
-Group:		System/Libraries
-%rename %{oldlibpostproc}
-
-%description -n %{libpostproc}
-This package contains a shared library for %{name}.
-
 %package -n %{libswresample}
 Summary:	Shared library part of ffmpeg
 Group:		System/Libraries
@@ -391,7 +386,6 @@ Requires:	%{libavdevice} = %{EVRD}
 Requires:	%{libavfilter} = %{EVRD}
 Requires:	%{libavformat} = %{EVRD}
 Requires:	%{libavutil} = %{EVRD}
-Requires:	%{libpostproc} = %{EVRD}
 Requires:	%{libswresample} = %{EVRD}
 %if %{with swscaler}
 Requires:	%{libswscale} = %{EVRD}
@@ -426,6 +420,8 @@ Suggests:	libxvidcore.so.4
 Suggests:	libfdk-aac.so.2
 Requires:	libvdpau-drivers
 %rename %{oldlib32avcodec}
+Obsoletes: %{lib32postproc} < %{EVRD}
+Obsoletes: %{oldlib32postproc} < %{EVRD}
 
 %description -n %{lib32avcodec}
 This package contains a shared library for %{name}.
@@ -462,14 +458,6 @@ Group:		System/Libraries
 %description -n %{lib32avutil}
 This package contains a shared library for %{name}.
 
-%package -n %{lib32postproc}
-Summary:	Shared library part of ffmpeg (32-bit)
-Group:		System/Libraries
-%rename %{oldlib32postproc}
-
-%description -n %{lib32postproc}
-This package contains a shared library for %{name}.
-
 %package -n %{lib32swresample}
 Summary:	Shared library part of ffmpeg (32-bit)
 Group:		System/Libraries
@@ -497,7 +485,6 @@ Requires:	%{lib32avdevice} = %{EVRD}
 Requires:	%{lib32avfilter} = %{EVRD}
 Requires:	%{lib32avformat} = %{EVRD}
 Requires:	%{lib32avutil} = %{EVRD}
-Requires:	%{lib32postproc} = %{EVRD}
 Requires:	%{lib32swresample} = %{EVRD}
 %if %{with swscaler}
 Requires:	%{lib32swscale} = %{EVRD}
@@ -558,7 +545,6 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--shlibdir=%{_prefix}/lib \
 	--incdir=%{_includedir} \
 	--disable-stripping \
-	--enable-postproc \
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
@@ -673,7 +659,6 @@ if ! ./configure \
 	--disable-stripping \
 	--enable-amf \
 	--enable-libjxl \
-	--enable-postproc \
 	--enable-gpl \
 	--enable-version3 \
 	--enable-nonfree \
@@ -849,9 +834,6 @@ cd ..
 %files -n %{libavutil}
 %{_libdir}/libavutil.so.%{avumajor}*
 
-%files -n %{libpostproc}
-%{_libdir}/libpostproc.so.%{ppmajor}*
-
 %files -n %{libswresample}
 %{_libdir}/libswresample.so.%{swrmajor}*
 
@@ -865,14 +847,12 @@ cd ..
 %{_includedir}/libavdevice
 %{_includedir}/libavformat
 %{_includedir}/libavutil
-%{_includedir}/libpostproc
 %{_includedir}/libavfilter
 %{_includedir}/libswresample
 %{_libdir}/libavcodec.so
 %{_libdir}/libavdevice.so
 %{_libdir}/libavformat.so
 %{_libdir}/libavutil.so
-%{_libdir}/libpostproc.so
 %{_libdir}/libavfilter.so
 %{_libdir}/libswresample.so
 %if %{with swscaler}
@@ -884,7 +864,6 @@ cd ..
 %{_libdir}/pkgconfig/libavdevice.pc
 %{_libdir}/pkgconfig/libavformat.pc
 %{_libdir}/pkgconfig/libavutil.pc
-%{_libdir}/pkgconfig/libpostproc.pc
 %{_libdir}/pkgconfig/libavfilter.pc
 %{_libdir}/pkgconfig/libswresample.pc
 %doc %{_mandir}/man3/libavcodec.3*
@@ -915,9 +894,6 @@ cd ..
 %files -n %{lib32avutil}
 %{_prefix}/lib/libavutil.so.%{avumajor}*
 
-%files -n %{lib32postproc}
-%{_prefix}/lib/libpostproc.so.%{ppmajor}*
-
 %files -n %{lib32swresample}
 %{_prefix}/lib/libswresample.so.%{swrmajor}*
 
@@ -931,7 +907,6 @@ cd ..
 %{_prefix}/lib/libavdevice.so
 %{_prefix}/lib/libavformat.so
 %{_prefix}/lib/libavutil.so
-%{_prefix}/lib/libpostproc.so
 %{_prefix}/lib/libavfilter.so
 %{_prefix}/lib/libswresample.so
 %if %{with swscaler}
@@ -942,7 +917,6 @@ cd ..
 %{_prefix}/lib/pkgconfig/libavdevice.pc
 %{_prefix}/lib/pkgconfig/libavformat.pc
 %{_prefix}/lib/pkgconfig/libavutil.pc
-%{_prefix}/lib/pkgconfig/libpostproc.pc
 %{_prefix}/lib/pkgconfig/libavfilter.pc
 %{_prefix}/lib/pkgconfig/libswresample.pc
 

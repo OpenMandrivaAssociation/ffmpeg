@@ -1,0 +1,24 @@
+diff -up ffmpeg-8.0/libavcodec/libsvt_vp9.c.omv~ ffmpeg-8.0/libavcodec/libsvt_vp9.c
+--- ffmpeg-8.0/libavcodec/libsvt_vp9.c.omv~	2025-08-26 01:53:03.926321649 +0200
++++ ffmpeg-8.0/libavcodec/libsvt_vp9.c	2025-08-26 01:55:21.908045166 +0200
+@@ -29,6 +29,7 @@
+ #include "libavutil/mem.h"
+ #include "libavutil/opt.h"
+ #include "libavcodec/get_bits.h"
++#include "libavcodec/codec_desc.h"
+ 
+ #include "codec_internal.h"
+ #include "internal.h"
+@@ -211,10 +212,10 @@ static int config_enc_params(EbSvtVp9Enc
+ 
+     if (avctx->framerate.num > 0 && avctx->framerate.den > 0) {
+         param->frame_rate_numerator     = avctx->framerate.num;
+-        param->frame_rate_denominator   = avctx->framerate.den * avctx->ticks_per_frame;
++        param->frame_rate_denominator   = avctx->framerate.den * (avctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS);
+     } else {
+         param->frame_rate_numerator     = avctx->time_base.den;
+-        param->frame_rate_denominator   = avctx->time_base.num * avctx->ticks_per_frame;
++        param->frame_rate_denominator   = avctx->time_base.num * (avctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS);
+     }
+ 
+     if (param->rate_control_mode) {
