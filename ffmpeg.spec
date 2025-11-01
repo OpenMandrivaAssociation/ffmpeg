@@ -98,7 +98,7 @@ Name:		ffmpeg
 %define x264_major 164
 %define x265_major 215
 Version:	8.0
-Release:	2
+Release:	3
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -320,7 +320,6 @@ Suggests:	libxvidcore.so.4%{_arch_tag_suffix}
 Suggests:	libfdk-aac.so.2%{_arch_tag_suffix}
 %endif
 %endif
-Requires:	vdpau-drivers
 %rename %{oldlibavcodec}
 Obsoletes:	%{libpostproc} < %{EVRD}
 Obsoletes:	%{oldlibpostproc} < %{EVRD}
@@ -418,7 +417,6 @@ Suggests:	libopencore-amrwb.so.0
 Suggests:	libmp3lame.so.0
 Suggests:	libxvidcore.so.4
 Suggests:	libfdk-aac.so.2
-Requires:	libvdpau-drivers
 %rename %{oldlib32avcodec}
 Obsoletes: %{lib32postproc} < %{EVRD}
 Obsoletes: %{oldlib32postproc} < %{EVRD}
