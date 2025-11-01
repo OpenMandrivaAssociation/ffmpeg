@@ -321,7 +321,6 @@ Suggests:	libxvidcore.so.4%{_arch_tag_suffix}
 Suggests:	libfdk-aac.so.2%{_arch_tag_suffix}
 %endif
 %endif
-Requires:	vdpau-drivers
 %rename %{oldlibavcodec}
 
 %description -n %{libavcodec}
@@ -426,7 +425,6 @@ Suggests:	libopencore-amrwb.so.0
 Suggests:	libmp3lame.so.0
 Suggests:	libxvidcore.so.4
 Suggests:	libfdk-aac.so.2
-Requires:	libvdpau-drivers
 %rename %{oldlib32avcodec}
 
 %description -n %{lib32avcodec}
