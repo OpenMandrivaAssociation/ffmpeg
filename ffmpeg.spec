@@ -129,6 +129,7 @@ Patch8:		ffmpeg-stv-vp9-port-to-8.0.patch
 %endif
 # From upstream git:
 # (currently nothing backported)
+BuildRequires:	make
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
 %ifarch %{ix86} %{x86_64}
