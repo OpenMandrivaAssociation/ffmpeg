@@ -129,6 +129,7 @@ Patch7:		master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 Patch9:		libsvtav1_rename_aq_mode.patch
 # From upstream git:
 # (currently nothing backported)
+BuildRequires:	make
 BuildRequires:	AMF-devel
 BuildRequires:	texi2html
 %ifarch %{ix86} %{x86_64}
