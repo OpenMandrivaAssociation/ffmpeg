@@ -126,6 +126,7 @@ Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 # https://github.com/OpenVisualCloud/SVT-VP9/blob/master/ffmpeg_plugin/master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 Patch7:		master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 %endif
+Patch9:		libsvtav1_rename_aq_mode.patch
 # From upstream git:
 # (currently nothing backported)
 BuildRequires:	AMF-devel
