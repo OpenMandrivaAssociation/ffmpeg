@@ -97,8 +97,8 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 164
 %define x265_major 215
-Version:	8.0.1
-Release:	2
+Version:	8.1
+Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -127,7 +127,6 @@ Patch7:		master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 # Fix the results of patch7 to work with ffmpeg 8
 Patch8:		ffmpeg-stv-vp9-port-to-8.0.patch
 %endif
-Patch9:		libsvtav1_rename_aq_mode.patch
 # From upstream git:
 # (currently nothing backported)
 BuildRequires:	make

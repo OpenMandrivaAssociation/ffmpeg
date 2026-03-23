@@ -1,34 +1,15 @@
-From 38eb54ccd1f624e2ab700c1b10a0e6980df9c0b2 Mon Sep 17 00:00:00 2001
-From: hassene <hassene.tmar@intel.com>
-Date: Fri, 15 Feb 2019 17:43:54 -0800
-Subject: [PATCH] Add ability for ffmpeg to run svt vp9
-
-Signed-off-by: hassene <hassene.tmar@intel.com>
-Signed-off-by: Jing Sun <jing.a.sun@intel.com>
-Signed-off-by: Austin Hu <austin.hu@intel.com>
-Signed-off-by: Andrei Bich <dronimal@yandex-team.ru>
-Signed-off-by: Guo Jiansheng <jiansheng.guo@intel.com>
----
- configure               |   4 +
- libavcodec/Makefile     |   1 +
- libavcodec/allcodecs.c  |   1 +
- libavcodec/libsvt_vp9.c | 701 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 707 insertions(+)
- create mode 100644 libavcodec/libsvt_vp9.c
-
-diff --git a/configure b/configure
-index 9f508a2527..a73e1f73c1 100755
---- a/configure
-+++ b/configure
-@@ -278,6 +278,7 @@ External library support:
+diff -up ffmpeg-8.1/configure.4~ ffmpeg-8.1/configure
+--- ffmpeg-8.1/configure.4~	2026-03-23 18:16:56.403830934 +0100
++++ ffmpeg-8.1/configure	2026-03-23 18:18:05.675562935 +0100
+@@ -286,6 +286,7 @@ External library support:
    --enable-libsrt          enable Haivision SRT protocol via libsrt [no]
    --enable-libssh          enable SFTP protocol via libssh [no]
    --enable-libsvtav1       enable AV1 encoding via SVT [no]
 +  --enable-libsvtvp9       enable VP9 encoding via svt [no]
+   --enable-libsvtjpegxs    enable JPEGXS encoding/decoding via SVT [no]
    --enable-libtensorflow   enable TensorFlow as a DNN module backend
                             for DNN based filters like sr [no]
-   --enable-libtesseract    enable Tesseract, needed for ocr filter [no]
-@@ -1955,6 +1956,7 @@ EXTERNAL_LIBRARY_LIST="
+@@ -2097,12 +2098,14 @@ EXTERNAL_LIBRARY_LIST="
      libshaderc
      libshine
      libsmbclient
@@ -36,7 +17,14 @@ index 9f508a2527..a73e1f73c1 100755
      libsnappy
      libsoxr
      libspeex
-@@ -3587,6 +3589,7 @@ libvpx_vp8_decoder_deps="libvpx"
+     libsrt
+     libssh
+     libsvtav1
++    libsvtvp9
+     libsvtjpegxs
+     libtensorflow
+     libtesseract
+@@ -3839,6 +3842,7 @@ libvpx_vp8_decoder_deps="libvpx"
  libvpx_vp8_encoder_deps="libvpx"
  libvpx_vp9_decoder_deps="libvpx"
  libvpx_vp9_encoder_deps="libvpx"
@@ -44,19 +32,18 @@ index 9f508a2527..a73e1f73c1 100755
  libvvenc_encoder_deps="libvvenc"
  libwebp_encoder_deps="libwebp"
  libwebp_anim_encoder_deps="libwebp"
-@@ -7008,6 +7011,7 @@ enabled libssh            && require_pkg_config libssh "libssh >= 0.6.0" libssh/
+@@ -7393,6 +7397,7 @@ enabled libssh            && require_pkg
  enabled libspeex          && require_pkg_config libspeex speex speex/speex.h speex_decoder_init
  enabled libsrt            && require_pkg_config libsrt "srt >= 1.3.0" srt/srt.h srt_socket
  enabled libsvtav1         && require_pkg_config libsvtav1 "SvtAv1Enc >= 0.9.0" EbSvtAv1Enc.h svt_av1_enc_init_handle
 +enabled libsvtvp9         && require_pkg_config libsvtvp9 SvtVp9Enc EbSvtVp9Enc.h       eb_vp9_svt_init_handle
+ enabled libsvtjpegxs      && require_pkg_config libsvtjpegxs "SvtJpegxs >= 0.10.0" SvtJpegxsEnc.h svt_jpeg_xs_encoder_init
  enabled libtensorflow     && require libtensorflow tensorflow/c/c_api.h TF_Version -ltensorflow
  enabled libtesseract      && require_pkg_config libtesseract tesseract tesseract/capi.h TessBaseAPICreate
- enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
-diff --git a/libavcodec/Makefile b/libavcodec/Makefile
-index dd5d0de898..5d2c74e95d 100644
---- a/libavcodec/Makefile
-+++ b/libavcodec/Makefile
-@@ -1160,6 +1160,7 @@ OBJS-$(CONFIG_LIBVO_AMRWBENC_ENCODER)     += libvo-amrwbenc.o
+diff -up ffmpeg-8.1/libavcodec/Makefile.4~ ffmpeg-8.1/libavcodec/Makefile
+--- ffmpeg-8.1/libavcodec/Makefile.4~	2026-03-16 19:13:04.000000000 +0100
++++ ffmpeg-8.1/libavcodec/Makefile	2026-03-23 18:16:56.600781491 +0100
+@@ -1217,6 +1217,7 @@ OBJS-$(CONFIG_LIBVO_AMRWBENC_ENCODER)
  OBJS-$(CONFIG_LIBVORBIS_DECODER)          += libvorbisdec.o
  OBJS-$(CONFIG_LIBVORBIS_ENCODER)          += libvorbisenc.o \
                                               vorbis_data.o
@@ -64,11 +51,10 @@ index dd5d0de898..5d2c74e95d 100644
  OBJS-$(CONFIG_LIBVPX_VP8_DECODER)         += libvpxdec.o
  OBJS-$(CONFIG_LIBVPX_VP8_ENCODER)         += libvpxenc.o
  OBJS-$(CONFIG_LIBVPX_VP9_DECODER)         += libvpxdec.o
-diff --git a/libavcodec/allcodecs.c b/libavcodec/allcodecs.c
-index c7e5f9910c..acb332fb08 100644
---- a/libavcodec/allcodecs.c
-+++ b/libavcodec/allcodecs.c
-@@ -798,6 +798,7 @@ extern const FFCodec ff_libuavs3d_decoder;
+diff -up ffmpeg-8.1/libavcodec/allcodecs.c.4~ ffmpeg-8.1/libavcodec/allcodecs.c
+--- ffmpeg-8.1/libavcodec/allcodecs.c.4~	2026-03-16 19:13:04.000000000 +0100
++++ ffmpeg-8.1/libavcodec/allcodecs.c	2026-03-23 18:16:56.601699891 +0100
+@@ -826,6 +826,7 @@ extern const FFCodec ff_libuavs3d_decode
  extern const FFCodec ff_libvo_amrwbenc_encoder;
  extern const FFCodec ff_libvorbis_encoder;
  extern const FFCodec ff_libvorbis_decoder;
@@ -76,11 +62,9 @@ index c7e5f9910c..acb332fb08 100644
  extern const FFCodec ff_libvpx_vp8_encoder;
  extern const FFCodec ff_libvpx_vp8_decoder;
  extern FFCodec ff_libvpx_vp9_encoder;
-diff --git a/libavcodec/libsvt_vp9.c b/libavcodec/libsvt_vp9.c
-new file mode 100644
-index 0000000000..05d2a95e99
---- /dev/null
-+++ b/libavcodec/libsvt_vp9.c
+diff -up ffmpeg-8.1/libavcodec/libsvt_vp9.c.4~ ffmpeg-8.1/libavcodec/libsvt_vp9.c
+--- ffmpeg-8.1/libavcodec/libsvt_vp9.c.4~	2026-03-23 18:16:56.603861885 +0100
++++ ffmpeg-8.1/libavcodec/libsvt_vp9.c	2026-03-23 18:16:56.603549751 +0100
 @@ -0,0 +1,701 @@
 +/*
 +* Scalable Video Technology for VP9 encoder library plugin
@@ -783,6 +767,3 @@ index 0000000000..05d2a95e99
 +    .defaults         = eb_enc_defaults,
 +    .p.wrapper_name   = "libsvt_vp9",
 +};
--- 
-2.46.1
-
