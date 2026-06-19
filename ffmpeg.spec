@@ -252,6 +252,7 @@ BuildRequires:	gomp-devel
 #BuildRequires:	devel(libgomp)
 # but this is currently missing in the x86_64 tree because of
 # a fluke during the distro-release upgrade
+BuildRequires:	devel(libatomic)
 BuildRequires:	devel(libfontconfig)
 BuildRequires:	devel(libopenal)
 BuildRequires:	devel(libogg)
