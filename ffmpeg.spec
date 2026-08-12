@@ -97,8 +97,8 @@ Name:		ffmpeg
 # AND UPLOAD output file as SOURCE1
 %define x264_major 165
 %define x265_major 217
-Version:9.0.1
-Release:1
+Version:	9.0.1
+Release:	1
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
