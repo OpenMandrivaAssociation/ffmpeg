@@ -1,6 +1,6 @@
-diff -up ffmpeg-8.0/libavcodec/libsvt_vp9.c.omv~ ffmpeg-8.0/libavcodec/libsvt_vp9.c
---- ffmpeg-8.0/libavcodec/libsvt_vp9.c.omv~	2025-08-26 01:53:03.926321649 +0200
-+++ ffmpeg-8.0/libavcodec/libsvt_vp9.c	2025-08-26 01:55:21.908045166 +0200
+diff -uprN after_master/libavcodec/libsvt_vp9.c ffmpeg-9.0.1/libavcodec/libsvt_vp9.c
+--- ffmpeg-9.0.1/libavcodec/libsvt_vp9.c	2026-08-12 18:49:55.852702932 +0200
++++ ffmpeg-9.0.1/libavcodec/libsvt_vp9.c	2026-08-12 18:49:55.999503517 +0200
 @@ -29,6 +29,7 @@
  #include "libavutil/mem.h"
  #include "libavutil/opt.h"
@@ -14,11 +14,21 @@ diff -up ffmpeg-8.0/libavcodec/libsvt_vp9.c.omv~ ffmpeg-8.0/libavcodec/libsvt_vp
      if (avctx->framerate.num > 0 && avctx->framerate.den > 0) {
          param->frame_rate_numerator     = avctx->framerate.num;
 -        param->frame_rate_denominator   = avctx->framerate.den * avctx->ticks_per_frame;
-+        param->frame_rate_denominator   = avctx->framerate.den * (avctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS);
++        param->frame_rate_denominator   = avctx->framerate.den * ((avctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS) ? 2 : 1);
      } else {
          param->frame_rate_numerator     = avctx->time_base.den;
 -        param->frame_rate_denominator   = avctx->time_base.num * avctx->ticks_per_frame;
-+        param->frame_rate_denominator   = avctx->time_base.num * (avctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS);
++        param->frame_rate_denominator   = avctx->time_base.num * ((avctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS) ? 2 : 1);
      }
  
      if (param->rate_control_mode) {
+@@ -693,8 +694,7 @@ const FFCodec ff_libsvt_vp9_encoder = {
+     .p.capabilities   = AV_CODEC_CAP_DELAY | AV_CODEC_CAP_OTHER_THREADS,
+     .caps_internal    = FF_CODEC_CAP_NOT_INIT_THREADSAFE |
+                         FF_CODEC_CAP_AUTO_THREADS | FF_CODEC_CAP_INIT_CLEANUP,
+-    .p.pix_fmts       = (const enum AVPixelFormat[]){ AV_PIX_FMT_YUV420P,
+-                                                    AV_PIX_FMT_NONE },
++    CODEC_PIXFMTS(AV_PIX_FMT_YUV420P),
+     .p.priv_class     = &class,
+     .defaults         = eb_enc_defaults,
+     .p.wrapper_name   = "libsvt_vp9",

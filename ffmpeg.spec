@@ -3,11 +3,11 @@
 %bcond_without compat32
 %endif
 
-%define major 62
-%define avumajor 60
-%define swsmajor 9
-%define filtermajor 11
-%define swrmajor 6
+%define major 63
+%define avumajor 61
+%define swsmajor 10
+%define filtermajor 12
+%define swrmajor 7
 %define libavcodec %mklibname avcodec
 %define libavdevice %mklibname avdevice
 %define libavfilter %mklibname avfilter
@@ -95,10 +95,17 @@ Name:		ffmpeg
 # (tpg) BIG FAT WARNING !!!
 # ALWAYS RUN package-restricted-headers.sh
 # AND UPLOAD output file as SOURCE1
+<<<<<<< HEAD
 %define x264_major 164
 %define x265_major 216
 Version:	8.1.2
 Release:	2
+=======
+%define x264_major 165
+%define x265_major 217
+Version:	9.0.1
+Release:	1
+>>>>>>> 63d85c9 (9.0.1)
 # BIG FAT WARNING !!!
 %if %{build_plf}
 License:	GPLv3+
@@ -124,7 +131,7 @@ Patch4:		ffmpeg-4.4-add-accessors-for-AVStream.patch
 %ifarch %{x86_64}
 # https://github.com/OpenVisualCloud/SVT-VP9/blob/master/ffmpeg_plugin/master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
 Patch7:		master-0001-Add-ability-for-ffmpeg-to-run-svt-vp9.patch
-# Fix the results of patch7 to work with ffmpeg 8
+# Fix the results of patch7 for modern FFmpeg API
 Patch8:		ffmpeg-stv-vp9-port-to-8.0.patch
 %endif
 # From upstream git:
@@ -147,7 +154,6 @@ BuildRequires:	gomp-devel
 %ifnarch %{riscv}
 BuildRequires:	pkgconfig(caca)
 %endif
-BuildRequires:	pkgconfig(celt)
 BuildRequires:	pkgconfig(fontconfig)
 %if !%{with dlopen} || "%{disttag}" == "mdk"
 BuildRequires:	pkgconfig(fdk-aac)
@@ -566,7 +572,6 @@ if ! CFLAGS="$(echo $CFLAGS |sed -e 's,-m64,,g;s,-mx32,,g') -fomit-frame-pointer
 	--enable-libspeex \
 	--enable-libfreetype \
 	--enable-libgsm \
-	--disable-libcelt \
 	--disable-libopencv \
 	--disable-frei0r \
 	--disable-libopenjpeg \
@@ -693,7 +698,6 @@ if ! ./configure \
 	--enable-libspeex \
 	--enable-libfreetype \
 	--enable-libgsm \
-	--enable-libcelt \
 %ifarch x86_64
 	--enable-libvpl \
 %endif

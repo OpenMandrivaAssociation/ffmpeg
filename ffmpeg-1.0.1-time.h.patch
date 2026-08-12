@@ -1,6 +1,7 @@
---- ffmpeg-1.0.1/libavutil/time.h	2012-12-04 17:58:13.659811039 +0100
-+++ ffmpeg-1.0.1/libavutil/time.h	2012-12-04 17:58:45.039180838 +0100
-@@ -39,3 +39,9 @@ int64_t av_gettime(void);
+diff -uprN ffmpeg-9.0.1/libavutil/time.h ffmpeg-9.0.1/libavutil/time.h
+--- ffmpeg-9.0.1/libavutil/time.h	2020-04-27 23:48:16.000000000 +0200
++++ ffmpeg-9.0.1/libavutil/time.h	2026-08-12 17:41:57.801136312 +0200
+@@ -54,3 +54,9 @@ int av_gettime_relative_is_monotonic(voi
  int av_usleep(unsigned usec);
  
  #endif /* AVUTIL_TIME_H */
